@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/lox'
+require_relative '../lib/rubolox'
 
-Lox.main(ARGV)
+Rubolox.main(ARGV)

@@ -1,4 +1,6 @@
-class Lox
+require_relative 'rubolox/scanner'
+
+module Rubolox
   def self.main(args)
     if args.size > 1
       $stdout.puts "Usage: rubolox [script]"
@@ -25,7 +27,12 @@ class Lox
     run(File.read(path))
   end
 
-  def self.run(code)
-    puts code
+  def self.run(source)
+    scanner = Scanner.new(source)
+    tokens = scanner.scan_tokens
+
+    tokens.each do |token|
+      $stdout.puts(token)
+    end
   end
 end
