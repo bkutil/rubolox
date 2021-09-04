@@ -1,6 +1,8 @@
 require_relative 'rubolox/scanner'
 
 module Rubolox
+  @had_error = false
+
   def self.main(args)
     if args.size > 1
       $stdout.puts "Usage: rubolox [script]"
@@ -17,6 +19,7 @@ module Rubolox
       $stdout.print "> "
       line = $stdin.readline
       run(line)
+      @had_error = false
     end
   rescue EOFError => _
     exit 0
@@ -25,6 +28,9 @@ module Rubolox
   # FIXME: charset?
   def self.run_file(path)
     run(File.read(path))
+
+    # Indicate error in the exit code
+    exit 65 if (@had_error)
   end
 
   def self.run(source)
@@ -34,5 +40,14 @@ module Rubolox
     tokens.each do |token|
       $stdout.puts(token)
     end
+  end
+
+  def self.error(line, message)
+    report(line, "", message)
+  end
+
+  def self.report(line, where, message)
+    $stderr.puts("Line #{line}] Error #{where}: #{message}")
+    @had_error = true
   end
 end
