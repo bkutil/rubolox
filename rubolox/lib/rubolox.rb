@@ -1,3 +1,4 @@
+require_relative 'rubolox/token_type'
 require_relative 'rubolox/scanner'
 
 module Rubolox
