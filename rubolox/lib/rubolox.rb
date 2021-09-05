@@ -49,7 +49,7 @@ module Rubolox
   end
 
   def self.report(line, where, message)
-    $stderr.puts("Line #{line}] Error #{where}: #{message}")
+    $stderr.puts("[Line #{line}] Error #{where}: #{message}")
     @had_error = true
   end
 end
