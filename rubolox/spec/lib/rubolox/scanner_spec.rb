@@ -24,4 +24,22 @@ describe Rubolox::Scanner do
       ]
     end
   end
+
+  describe "invalid sequence of tokens" do
+    let(:source) { "@" }
+
+    it "outputs errors" do
+      original_stderr = $stderr
+      io = StringIO.new
+      $stderr = io
+
+      begin
+        scanner.scan_tokens
+        output = io.tap(&:rewind).read
+        _(output.to_s).must_equal "[Line 1] Error : Unexpected character @.\n"
+      ensure
+        $stderr = original_stderr
+      end
+    end
+  end
 end

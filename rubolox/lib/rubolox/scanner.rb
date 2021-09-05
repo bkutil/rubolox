@@ -44,6 +44,8 @@ module Rubolox
         add_token(TokenType::SEMICOLON)
       when "*"
         add_token(TokenType::STAR)
+      else
+        Rubolox.error(line, "Unexpected character #{c}.")
       end
     end
 
