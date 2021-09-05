@@ -44,9 +44,24 @@ module Rubolox
         add_token(TokenType::SEMICOLON)
       when "*"
         add_token(TokenType::STAR)
+      when "!"
+        add_token(match("=") ? TokenType::BANG_EQUAL : TokenType::BANG)
+      when "="
+        add_token(match("=") ? TokenType::EQUAL_EQUAL : TokenType::EQUAL)
+      when "<"
+        add_token(match("=") ? TokenType::LESS_EQUAL : TokenType::LESS)
+      when ">"
+        add_token(match("=") ? TokenType::GREATER_EQUAL : TokenType::GREATER)
       else
         Rubolox.error(line, "Unexpected character #{c}.")
       end
+    end
+
+    def match(expected)
+      return false if is_at_end
+      return false if source[current] != expected
+
+      self.current += 1
     end
 
     def is_at_end

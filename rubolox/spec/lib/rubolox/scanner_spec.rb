@@ -25,6 +25,17 @@ describe Rubolox::Scanner do
     end
   end
 
+  describe "two letter token" do
+    let(:source) { ">=" }
+
+    it "returns the correct token" do
+      _(scanner.scan_tokens).must_equal [
+        Rubolox::Token.new(Rubolox::TokenType::GREATER_EQUAL, ">=", nil, 1),
+        Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 1)
+      ]
+    end
+  end
+
   describe "invalid sequence of tokens" do
     let(:source) { "@" }
 
