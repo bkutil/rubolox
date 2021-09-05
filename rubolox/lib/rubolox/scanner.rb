@@ -52,8 +52,9 @@ module Rubolox
     end
 
     def advance
-      current += 1
-      source[current]
+      source[current].tap do
+        self.current += 1
+      end
     end
 
     def add_token(type, literal = nil)
