@@ -10,11 +10,11 @@ module Rubolox
 
     def scan_tokens
       while !is_at_end do
-        start = current
+        self.start = current
         scan_token
       end
 
-      tokens << Token.new(TokenType::EOF, "", nil, line)
+      self.tokens << Token.new(TokenType::EOF, "", nil, line)
 
       tokens
     end
