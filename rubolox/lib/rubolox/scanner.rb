@@ -62,9 +62,28 @@ module Rubolox
         # Ignore whitespace.
       when "\n"
         self.line += 1
+      when '"'
+        string
       else
         Rubolox.error(line, "Unexpected character #{c}.")
       end
+    end
+
+    def string
+      while peek != '"' && !is_at_end
+        self.line += 1 if peek == "\n"
+        advance
+      end
+
+      if is_at_end
+        Rubolox.error(line, "Unterminated string.")
+      end
+
+      advance # The closing ".
+
+      # Trim the surrounding quotes.
+      value = source[((start + 1)...(current - 1))]
+      add_token(TokenType::STRING, value)
     end
 
     def match(expected)
