@@ -52,6 +52,16 @@ module Rubolox
         add_token(match("=") ? TokenType::LESS_EQUAL : TokenType::LESS)
       when ">"
         add_token(match("=") ? TokenType::GREATER_EQUAL : TokenType::GREATER)
+      when "/"
+        if match("/")
+          advance while peek != "\n" && !is_at_end
+        else
+          add_token(TokenType::SLASH)
+        end
+      when " ", "\r", "\t"
+        # Ignore whitespace.
+      when "\n"
+        self.line += 1
       else
         Rubolox.error(line, "Unexpected character #{c}.")
       end
@@ -62,6 +72,11 @@ module Rubolox
       return false if source[current] != expected
 
       self.current += 1
+    end
+
+    def peek
+      return "\0" if is_at_end
+      source[current]
     end
 
     def is_at_end

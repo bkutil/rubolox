@@ -36,6 +36,23 @@ describe Rubolox::Scanner do
     end
   end
 
+  describe "comments" do
+    let(:source) do
+      <<~SRC
+      // comment
+      / *
+      SRC
+    end
+
+    it "returns correct token" do
+      _(scanner.scan_tokens).must_equal [
+        Rubolox::Token.new(Rubolox::TokenType::SLASH, "/", nil, 2),
+        Rubolox::Token.new(Rubolox::TokenType::STAR, "*", nil, 2),
+        Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 3)
+      ]
+    end
+  end
+
   describe "invalid sequence of tokens" do
     let(:source) { "@" }
 
