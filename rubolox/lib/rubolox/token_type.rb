@@ -45,8 +45,8 @@ module Rubolox
       :WHILE,
 
       :EOF,
-    ].each.with_index do |keyword, i|
-      const_set(keyword, i)
+    ].each do |keyword|
+      const_set(keyword, keyword)
     end
   end
 end
