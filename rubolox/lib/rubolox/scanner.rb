@@ -75,7 +75,7 @@ module Rubolox
     end
 
     def add_token(type, literal = nil)
-      text = source[start, current]
+      text = source[(start...current)]
       tokens << Token.new(type, text, literal, line)
     end
 
