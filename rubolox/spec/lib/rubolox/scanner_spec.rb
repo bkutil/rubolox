@@ -108,6 +108,30 @@ describe Rubolox::Scanner do
     end
   end
 
+  describe "numbers" do
+    describe "integer" do
+      let(:source) { "1234" }
+
+      it "returns correct token" do
+        _(scanner.scan_tokens).must_equal [
+          Rubolox::Token.new(Rubolox::TokenType::NUMBER, "1234", 1234.0, 1),
+          Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 1)
+        ]
+      end
+    end
+
+    describe "floats" do
+      let(:source) { "1234.0" }
+
+      it "returns correct token" do
+        _(scanner.scan_tokens).must_equal [
+          Rubolox::Token.new(Rubolox::TokenType::NUMBER, "1234.0", 1234.0, 1),
+          Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 1)
+        ]
+      end
+    end
+  end
+
   describe "invalid sequence of tokens" do
     let(:source) { "@" }
 

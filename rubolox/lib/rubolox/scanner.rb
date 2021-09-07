@@ -65,8 +65,26 @@ module Rubolox
       when '"'
         string
       else
-        Rubolox.error(line, "Unexpected character #{c}.")
+        if is_digit(c)
+          number
+        else
+          Rubolox.error(line, "Unexpected character #{c}.")
+        end
       end
+    end
+
+    def number
+      advance while is_digit(peek)
+
+      # Look for a fractional part
+      if peek == "." && is_digit(peek_next)
+        # Consume the .
+        advance
+
+        advance while is_digit(peek)
+      end
+
+      add_token(TokenType::NUMBER, Float(source[(start...current)]))
     end
 
     def string
@@ -96,6 +114,15 @@ module Rubolox
     def peek
       return "\0" if is_at_end
       source[current]
+    end
+
+    def peek_next
+      return "\0" if current + 1 >= source.length
+      source[current + 1]
+    end
+
+    def is_digit(c)
+      c >= "0" && c <= "9"
     end
 
     def is_at_end
