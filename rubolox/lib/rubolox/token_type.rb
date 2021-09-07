@@ -27,7 +27,7 @@ module Rubolox
       :STRING,
       :NUMBER,
       # Keywords
-      :END,
+      :AND,
       :CLASS,
       :ELSE,
       :FALSE,
