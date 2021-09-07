@@ -132,6 +132,17 @@ describe Rubolox::Scanner do
     end
   end
 
+  describe "identifiers" do
+    let(:source) { "f_o_o_1" }
+
+    it "returns correct token" do
+      _(scanner.scan_tokens).must_equal [
+        Rubolox::Token.new(Rubolox::TokenType::IDENTIFIER, "f_o_o_1", nil, 1),
+        Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 1)
+      ]
+    end
+  end
+
   describe "invalid sequence of tokens" do
     let(:source) { "@" }
 

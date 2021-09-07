@@ -67,10 +67,18 @@ module Rubolox
       else
         if is_digit(c)
           number
+        elsif is_alpha(c)
+          identifier
         else
           Rubolox.error(line, "Unexpected character #{c}.")
         end
       end
+    end
+
+    def identifier
+      advance while is_alphanumeric(peek)
+
+      add_token(TokenType::IDENTIFIER)
     end
 
     def number
@@ -119,6 +127,14 @@ module Rubolox
     def peek_next
       return "\0" if current + 1 >= source.length
       source[current + 1]
+    end
+
+    def is_alpha(c)
+      (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || c == "_"
+    end
+
+    def is_alphanumeric(c)
+      is_alpha(c) || is_digit(c)
     end
 
     def is_digit(c)
