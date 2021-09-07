@@ -143,6 +143,31 @@ describe Rubolox::Scanner do
     end
   end
 
+  describe "keywords" do
+    let(:source) { "or" }
+
+    it "returns correct token" do
+      _(scanner.scan_tokens).must_equal [
+        Rubolox::Token.new(Rubolox::TokenType::OR, "or", nil, 1),
+        Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 1)
+      ]
+    end
+  end
+
+  describe "more complex source" do
+    let(:source) { "var foo = 1" }
+
+    it "returns correct tokens" do
+      _(scanner.scan_tokens).must_equal [
+        Rubolox::Token.new(Rubolox::TokenType::VAR, "var", nil, 1),
+        Rubolox::Token.new(Rubolox::TokenType::IDENTIFIER, "foo", nil, 1),
+        Rubolox::Token.new(Rubolox::TokenType::EQUAL, "=", nil, 1),
+        Rubolox::Token.new(Rubolox::TokenType::NUMBER, "1", 1.0, 1),
+        Rubolox::Token.new(Rubolox::TokenType::EOF, "", nil, 1)
+      ]
+    end
+  end
+
   describe "invalid sequence of tokens" do
     let(:source) { "@" }
 

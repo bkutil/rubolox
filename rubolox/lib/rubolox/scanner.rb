@@ -1,5 +1,24 @@
 module Rubolox
   class Scanner
+    KEYWORDS = {
+      "and"     => TokenType::AND,
+      "class"   => TokenType::CLASS,
+      "else"    => TokenType::ELSE,
+      "false"   => TokenType::FALSE,
+      "for"     => TokenType::FOR,
+      "fun"     => TokenType::FUN,
+      "if"      => TokenType::IF,
+      "nil"     => TokenType::NIL,
+      "or"      => TokenType::OR,
+      "print"   => TokenType::PRINT,
+      "return"  => TokenType::RETURN,
+      "super"   => TokenType::SUPER,
+      "this"    => TokenType::THIS,
+      "true"    => TokenType::TRUE,
+      "var"     => TokenType::VAR,
+      "while"   => TokenType::WHILE,
+    }.freeze
+
     def initialize(source)
       @source = source
       @tokens = []
@@ -78,7 +97,10 @@ module Rubolox
     def identifier
       advance while is_alphanumeric(peek)
 
-      add_token(TokenType::IDENTIFIER)
+      text = source[(start...current)]
+      type = KEYWORDS.fetch(text, TokenType::IDENTIFIER)
+
+      add_token(type)
     end
 
     def number
