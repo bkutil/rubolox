@@ -4,6 +4,15 @@ require "minitest/autorun"
 describe Rubolox::Scanner do
   let(:scanner) { Rubolox::Scanner.new(source) }
 
+  def capture_stderr
+    original_stderr = $stderr
+    $stderr = StringIO.new
+    yield
+    $stderr.tap(&:rewind).read.to_s
+  ensure
+    $stderr = original_stderr
+  end
+
   describe "empty source" do
     let(:source) { "" }
 
@@ -93,17 +102,8 @@ describe Rubolox::Scanner do
       end
 
       it "reports an error" do
-        original_stderr = $stderr
-        io = StringIO.new
-        $stderr = io
-
-        begin
-          scanner.scan_tokens
-          output = io.tap(&:rewind).read
-          _(output.to_s).must_equal "[Line 2] Error : Unterminated string.\n"
-        ensure
-          $stderr = original_stderr
-        end
+        output = capture_stderr { scanner.scan_tokens }
+        _(output.to_s).must_equal "[Line 2] Error : Unterminated string.\n"
       end
     end
   end
@@ -112,17 +112,8 @@ describe Rubolox::Scanner do
     let(:source) { "@" }
 
     it "outputs errors" do
-      original_stderr = $stderr
-      io = StringIO.new
-      $stderr = io
-
-      begin
-        scanner.scan_tokens
-        output = io.tap(&:rewind).read
-        _(output.to_s).must_equal "[Line 1] Error : Unexpected character @.\n"
-      ensure
-        $stderr = original_stderr
-      end
+      output = capture_stderr { scanner.scan_tokens }
+      _(output).must_equal "[Line 1] Error : Unexpected character @.\n"
     end
   end
 end
