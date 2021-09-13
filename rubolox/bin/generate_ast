@@ -5,30 +5,54 @@ def define_ast(output_dir, base_name, types)
   File.open(path, "w") do |f|
     f.write("module Rubolox\n")
     f.write("  class #{base_name}\n")
-    f.write("  end\n\n")
 
+    define_visitor(f, base_name, types)
+
+    # The AST classes.
     types.each do |type|
       class_name, fields = type.split(":").map(&:strip)
       define_type(f, base_name, class_name, fields)
     end
 
+    # The base accept method.
+    f.write("    def accept(visitor)\n")
+    f.write("      raise 'To be implemented'\n")
+    f.write("    end\n")
+    f.write("  end\n")
     f.write("end\n")
   end
+end
+
+def define_visitor(f, base_name, types)
+  f.write("    class Visitor\n")
+  types.each do |type|
+    type_name = type.split(":").first.strip.downcase
+
+    f.write("      def visit_#{type_name}_#{base_name.downcase}(#{base_name.downcase})\n")
+    f.write("        raise 'To be implemented'\n")
+    f.write("      end\n\n")
+  end
+  f.write("    end\n\n")
 end
 
 def define_type(f, base_name, class_name, fields)
   names = fields.split(", ").map { |f| f.split(" ") }.map(&:last)
 
-  f.write("  class #{class_name} < #{base_name}\n")
-  f.write("    attr_reader #{names.map { |n| ":#{n}" }.join(", ")}\n\n")
-  f.write("    def initialize(#{names.join(", ")})\n")
+  f.write("    class #{class_name} < #{base_name}\n")
+  f.write("      attr_reader #{names.map { |n| ":#{n}" }.join(", ")}\n\n")
+  f.write("      def initialize(#{names.join(", ")})\n")
 
   names.each do |name|
-    f.write("      @#{name} = #{name}\n")
+    f.write("        @#{name} = #{name}\n")
   end
+  f.write("      end\n\n")
 
-  f.write("    end\n")
-  f.write("  end\n\n")
+  # Visitor pattern.
+  f.write("      def accept(visitor)\n")
+  f.write("        visitor.visit_#{class_name.downcase}_#{base_name.downcase}(self)\n")
+  f.write("      end\n")
+
+  f.write("    end\n\n")
 end
 
 if ARGV.length != 1
