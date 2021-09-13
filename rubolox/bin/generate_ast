@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+def define_ast(output_dir, base_name, types)
+  path = File.join(output_dir, base_name.downcase + ".rb")
+  File.open(path, "w") do |f|
+    f.write("module Rubolox\n")
+    f.write("  class #{base_name}\n")
+    f.write("  end\n\n")
+
+    types.each do |type|
+      class_name, fields = type.split(":").map(&:strip)
+      define_type(f, base_name, class_name, fields)
+    end
+
+    f.write("end\n")
+  end
+end
+
+def define_type(f, base_name, class_name, fields)
+  names = fields.split(", ").map { |f| f.split(" ") }.map(&:last)
+
+  f.write("  class #{class_name} < #{base_name}\n")
+  f.write("    attr_reader #{names.map { |n| ":#{n}" }.join(", ")}\n\n")
+  f.write("    def initialize(#{names.join(", ")})\n")
+
+  names.each do |name|
+    f.write("      @#{name} = #{name}\n")
+  end
+
+  f.write("    end\n")
+  f.write("  end\n\n")
+end
+
+if ARGV.length != 1
+  warn "Usage: generate_ast <output directory>"
+  exit 64
+end
+
+output_dir = ARGV[0]
+
+define_ast(output_dir, "Expr", [
+  "Binary   : Expr left, Token operator, Expr right",
+  "Grouping : Expr expression",
+  "Literal  : Object value",
+  "Unary    : Token operator, Expr right"
+])
