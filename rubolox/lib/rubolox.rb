@@ -2,6 +2,7 @@ require_relative 'rubolox/token'
 require_relative 'rubolox/token_type'
 require_relative 'rubolox/scanner'
 require_relative 'rubolox/expr'
+require_relative 'rubolox/ast_printer'
 require_relative 'rubolox/parser'
 
 module Rubolox
@@ -41,9 +42,12 @@ module Rubolox
     scanner = Scanner.new(source)
     tokens = scanner.scan_tokens
 
-    tokens.each do |token|
-      $stdout.puts(token)
-    end
+    parser = Parser.new(tokens)
+    expression = parser.parse
+
+    return if @had_error
+
+    $stdout.puts AstPrinter.new.print(expression)
   end
 
   def self.error(line, message)

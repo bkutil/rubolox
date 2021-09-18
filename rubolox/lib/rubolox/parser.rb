@@ -7,6 +7,12 @@ module Rubolox
       @current = 0
     end
 
+    def parse
+      expression
+    rescue ParseError
+      nil
+    end
+
     private
 
     def expression
@@ -85,6 +91,8 @@ module Rubolox
         consume(Token::RIGHT_PAREN, "Expect ')' after expression.")
         return Expr::Grouping.new(expr)
       end
+
+      raise error(peek, "Expect expression.")
     end
 
     def match(*token_types)
