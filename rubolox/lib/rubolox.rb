@@ -54,4 +54,12 @@ module Rubolox
     $stderr.puts("[Line #{line}] Error #{where}: #{message}")
     @had_error = true
   end
+
+  def self.error(token, message)
+    if (token.type == TokenType::EOF)
+      report(token.line, " at end", message)
+    else
+      report(token.line, " at '#{token.lexeme}'", message)
+    end
+  end
 end

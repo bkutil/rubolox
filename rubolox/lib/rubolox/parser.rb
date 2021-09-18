@@ -1,5 +1,7 @@
 module Rubolox
   class Parser
+    ParseError = Class.new(StandardError)
+
     def initialize(tokens)
       @tokens = tokens
       @current = 0
@@ -96,6 +98,12 @@ module Rubolox
       false
     end
 
+    def consume(token_type, message)
+      return advance if check(type)
+
+      raise error(peek, message)
+    end
+
     def check(type)
       return false if is_at_end
       peek.type == type
@@ -115,6 +123,11 @@ module Rubolox
 
     def previous
       tokens[current - 1]
+    end
+
+    def error(token, message)
+      Rubolox.error(token, message)
+      ParseError.new
     end
 
     attr_accessor :current, :tokens
