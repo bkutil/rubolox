@@ -1,17 +1,11 @@
 require "rubolox"
 require "minitest/autorun"
+require "support/output_capture"
 
 describe Rubolox::Scanner do
-  let(:scanner) { Rubolox::Scanner.new(source) }
+  include OutputCapture
 
-  def capture_stderr
-    original_stderr = $stderr
-    $stderr = StringIO.new
-    yield
-    $stderr.tap(&:rewind).read.to_s
-  ensure
-    $stderr = original_stderr
-  end
+  let(:scanner) { Rubolox::Scanner.new(source) }
 
   describe "empty source" do
     let(:source) { "" }
