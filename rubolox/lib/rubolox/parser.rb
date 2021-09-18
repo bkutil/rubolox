@@ -63,7 +63,7 @@ module Rubolox
 
     def unary
       if match(TokenType::BANG, TokenType::MINUS)
-        operator = preious
+        operator = previous
         right = unary
         return Expr::Unary.new(operator, right)
       end
