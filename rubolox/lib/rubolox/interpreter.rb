@@ -13,13 +13,49 @@ module Rubolox
 
       case unary.operator.type
       when TokenType::MINUS
-        return -Float(right)
+        -Float(right)
       when TokenType::BANG
-        return !is_truthy(right)
+        !is_truthy(right)
+      else
+        # Unreachable
+        nil
       end
+    end
 
-      # Unreachable
-      nil
+    def visit_binary_expr(binary)
+      left = evaluate(binary.left)
+      right = evaluate(binary.right)
+
+      case binary.operator.type
+      when TokenType::BANG_EQUAL
+        !is_equal(left, right)
+      when TokenType::EQUAL_EQUAL
+        is_equal(left, right)
+      when TokenType::GREATER
+        Float(left) > Float(right)
+      when TokenType::GREATER_EQUAL
+        Float(left) >= Float(right)
+      when TokenType::LESS
+        Float(left) < Float(right)
+      when TokenType::LESS_EQUAL
+        Float(left) <= Float(right)
+      when TokenType::MINUS
+        Float(left) - Float(right)
+      when TokenType::PLUS
+        # BK: Ruby doesn't distinguish between native types and their object
+        # counterparts, so this looks a little awkward.
+        if left.is_a?(Float) && right.is_a?(Float)
+          Float(left) + Float(right)
+        elsif left.is_a?(String) && right.is_a?(String)
+          String(left) + String(right)
+        end
+      when TokenType::SLASH
+        Float(left) / Float(right)
+      when TokenType::STAR
+        Float(left) * Float(right)
+      else
+        nil
+      end
     end
 
     private
@@ -31,6 +67,14 @@ module Rubolox
       return object if object.is_a?(TrueClass) || object.is_a?(FalseClass)
 
       true
+    end
+
+    def is_equal(a, b)
+      return true if a.nil? && b.nil?
+      return false if a.nil?
+
+      # FIXME: Java equality
+      a == b
     end
 
     def evaluate(expr)
