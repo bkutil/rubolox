@@ -24,6 +24,15 @@ module Rubolox
 
     private
 
+    def is_truthy(object)
+      # BK: even though Lox's truthy set is the same as Ruby's, let's keep the
+      # code close to the original implementation
+      return false if object == nil
+      return object if object.is_a?(TrueClass) || object.is_a?(FalseClass)
+
+      true
+    end
+
     def evaluate(expr)
       expr.accept(self)
     end
