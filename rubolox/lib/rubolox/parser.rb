@@ -88,7 +88,7 @@ module Rubolox
 
       if match(TokenType::LEFT_PAREN)
         expr = expression
-        consume(Token::RIGHT_PAREN, "Expect ')' after expression.")
+        consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.")
         return Expr::Grouping.new(expr)
       end
 
@@ -107,7 +107,7 @@ module Rubolox
     end
 
     def consume(token_type, message)
-      return advance if check(type)
+      return advance if check(token_type)
 
       raise error(peek, message)
     end
