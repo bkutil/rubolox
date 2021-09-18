@@ -2,6 +2,7 @@ require_relative 'rubolox/token'
 require_relative 'rubolox/token_type'
 require_relative 'rubolox/scanner'
 require_relative 'rubolox/expr'
+require_relative 'rubolox/parser'
 
 module Rubolox
   @had_error = false
