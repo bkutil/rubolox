@@ -43,9 +43,9 @@ module Rubolox
     def scan_token
       c = advance
       case c
-      when ")"
-        add_token(TokenType::LEFT_PAREN)
       when "("
+        add_token(TokenType::LEFT_PAREN)
+      when ")"
         add_token(TokenType::RIGHT_PAREN)
       when "{"
         add_token(TokenType::LEFT_BRACE)
