@@ -118,11 +118,11 @@ module Rubolox
     end
 
     def peek
-      tokens[current]
+      tokens[self.current]
     end
 
     def previous
-      tokens[current - 1]
+      tokens[self.current - 1]
     end
 
     def error(token, message)
