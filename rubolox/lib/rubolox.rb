@@ -50,20 +50,19 @@ module Rubolox
     $stdout.puts AstPrinter.new.print(expression)
   end
 
-  def self.error(line, message)
-    report(line, "", message)
+  def self.error(token_or_line, message)
+    # BK: we don't have method overloading, so use a check.
+    if (token_or_line.is_a?(Integer))
+      report(token_or_line, "", message)
+    elsif (token_or_line.type == TokenType::EOF)
+      report(token_or_line.line, " at end", message)
+    else
+      report(token_or_line.line, " at '#{token_or_line.lexeme}'", message)
+    end
   end
 
   def self.report(line, where, message)
     $stderr.puts("[Line #{line}] Error #{where}: #{message}")
     @had_error = true
-  end
-
-  def self.error(token, message)
-    if (token.type == TokenType::EOF)
-      report(token.line, " at end", message)
-    else
-      report(token.line, " at '#{token.lexeme}'", message)
-    end
   end
 end
