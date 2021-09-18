@@ -130,6 +130,30 @@ module Rubolox
       ParseError.new
     end
 
+    def synchronize
+      advance
+
+      while !is_at_end
+        return if previous.type == TokenType::SEMICOLON
+
+        # BK: use list inclusion instead of a case
+        likely_statement_start = [
+          TokenType::CLASS,
+          TokenType::RETURN,
+          TokenType::FUN,
+          TokenType::IF,
+          TokenType::PRINT,
+          TokenType::RETURN,
+          TokenType::VAR,
+          TokenType::WHILE
+        ]
+
+        return if likely_statement_start.include?(peek.type)
+
+        advance
+      end
+    end
+
     attr_accessor :current, :tokens
   end
 end
