@@ -55,9 +55,9 @@ module Rubolox
     if (token_or_line.is_a?(Integer))
       report(token_or_line, "", message)
     elsif (token_or_line.type == TokenType::EOF)
-      report(token_or_line.line, " at end", message)
+      report(token_or_line.line, "at end", message)
     else
-      report(token_or_line.line, " at '#{token_or_line.lexeme}'", message)
+      report(token_or_line.line, "at '#{token_or_line.lexeme}'", message)
     end
   end
 
