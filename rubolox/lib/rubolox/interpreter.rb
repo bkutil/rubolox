@@ -8,6 +8,20 @@ module Rubolox
       evaluate(grouping.expression)
     end
 
+    def visit_unary_expr(unary)
+      right = evaluate(unary.right)
+
+      case unary.operator.type
+      when TokenType::MINUS
+        return -Float(right)
+      when TokenType::BANG
+        return !is_truthy(right)
+      end
+
+      # Unreachable
+      nil
+    end
+
     private
 
     def evaluate(expr)
