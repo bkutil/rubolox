@@ -90,7 +90,7 @@ module Rubolox
     end
 
     def check_number_operand(operator, operand)
-      return if operand is_a?(Float)
+      return if operand.is_a?(Float)
       raise RuntimeError.new(operator, "Operand must be a number.")
     end
 
