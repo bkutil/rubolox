@@ -10,6 +10,7 @@ require_relative 'rubolox/runtime_error'
 module Rubolox
   @had_error = false
   @had_runtime_error = false
+  @interpreter = Interpreter.new
 
   def self.main(args)
     if args.size > 1
@@ -51,7 +52,7 @@ module Rubolox
 
     return if @had_error
 
-    $stdout.puts AstPrinter.new.print(expression)
+    @interpreter.interpret(expression)
   end
 
   def self.error(token_or_line, message)
