@@ -1,5 +1,12 @@
 module Rubolox
   class Interpreter < Expr::Visitor
+    def interpret(expression)
+      value = evaluate(expresion)
+      $stdout.puts(stringify(value))
+    rescue RuntimeError => error
+      Rubolox.runtime_error(error)
+    end
+
     def visit_literal_expr(literal)
       literal.value
     end
@@ -69,6 +76,18 @@ module Rubolox
     end
 
     private
+
+    def stringify(object)
+      return "nil" if object.nil?
+
+      if object.is_a?(Float)
+        text = object.to_s
+        text = text[0...-2] if text.end_with?(".0")
+        return text
+      end
+
+      object.to_s
+    end
 
     def check_number_operand(operator, operand)
       return if operand is_a?(Float)
