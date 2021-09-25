@@ -9,6 +9,7 @@ require_relative 'rubolox/runtime_error'
 
 module Rubolox
   @had_error = false
+  @had_runtime_error = false
 
   def self.main(args)
     if args.size > 1
@@ -37,7 +38,8 @@ module Rubolox
     run(File.read(path))
 
     # Indicate error in the exit code
-    exit 65 if (@had_error)
+    exit 65 if @had_error
+    exit 70 if @had_runtime_error
   end
 
   def self.run(source)
@@ -61,6 +63,11 @@ module Rubolox
     else
       report(token_or_line.line, "at '#{token_or_line.lexeme}'", message)
     end
+  end
+
+  def self.runtime_error(error)
+    $stderr.puts("#{error.message}\n[Line #{error.token.line}]")
+    @had_runtime_error = true
   end
 
   def self.report(line, where, message)
