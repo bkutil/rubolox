@@ -24,7 +24,7 @@ module Rubolox
 
       while match(TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL)
         operator = previous
-        right = comparsion
+        right = comparison
         expr = Expr::Binary.new(expr, operator, right)
       end
 
