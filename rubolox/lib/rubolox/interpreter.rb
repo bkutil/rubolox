@@ -20,7 +20,7 @@ module Rubolox
 
       case unary.operator.type
       when TokenType::MINUS
-        check_number_opearand(unary.operator, right)
+        check_number_operand(unary.operator, right)
         -Float(right)
       when TokenType::BANG
         !is_truthy(right)
