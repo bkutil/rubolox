@@ -23,16 +23,6 @@ module Rubolox
       end
     end
 
-    def check_number_operand(operator, operand)
-      return if operand is_a?(Float)
-      raise RuntimeError.new(operator, "Operand must be a number.")
-    end
-
-    def check_number_operands(operator, left, right)
-      return if left.is_a?(Float) && right.is_a?(Float)
-      raise RuntimeError.new(operator, "Operands must be numbers.")
-    end
-
     def visit_binary_expr(binary)
       left = evaluate(binary.left)
       right = evaluate(binary.right)
@@ -79,6 +69,16 @@ module Rubolox
     end
 
     private
+
+    def check_number_operand(operator, operand)
+      return if operand is_a?(Float)
+      raise RuntimeError.new(operator, "Operand must be a number.")
+    end
+
+    def check_number_operands(operator, left, right)
+      return if left.is_a?(Float) && right.is_a?(Float)
+      raise RuntimeError.new(operator, "Operands must be numbers.")
+    end
 
     def is_truthy(object)
       # BK: even though Lox's truthy set is the same as Ruby's, let's keep the
