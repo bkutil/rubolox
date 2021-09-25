@@ -75,6 +75,17 @@ describe Rubolox::Parser do
       end
     end
 
+    describe "equality" do
+      let(:source) { "1 == 1" }
+
+      it "produces the correct AST" do
+        expr = parser.parse
+
+        _(expr.class).must_equal(Rubolox::Expr::Binary)
+        _(expr.operator.type).must_equal(Rubolox::TokenType::EQUAL_EQUAL)
+      end
+    end
+
     describe "groups" do
       describe "unterminated" do
         let(:source) { '(nil' }
