@@ -1,7 +1,7 @@
 module Rubolox
   class Interpreter < Expr::Visitor
     def interpret(expression)
-      value = evaluate(expresion)
+      value = evaluate(expression)
       $stdout.puts(stringify(value))
     rescue RuntimeError => error
       Rubolox.runtime_error(error)
