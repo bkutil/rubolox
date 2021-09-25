@@ -20,7 +20,7 @@ module Rubolox
 
       case unary.operator.type
       when TokenType::MINUS
-        check_number_opearand(expr.operator, right)
+        check_number_opearand(unary.operator, right)
         -Float(right)
       when TokenType::BANG
         !is_truthy(right)
@@ -40,19 +40,19 @@ module Rubolox
       when TokenType::EQUAL_EQUAL
         is_equal(left, right)
       when TokenType::GREATER
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) > Float(right)
       when TokenType::GREATER_EQUAL
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) >= Float(right)
       when TokenType::LESS
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) < Float(right)
       when TokenType::LESS_EQUAL
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) <= Float(right)
       when TokenType::MINUS
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) - Float(right)
       when TokenType::PLUS
         # BK: Ruby doesn't distinguish between native types and their object
@@ -62,13 +62,13 @@ module Rubolox
         elsif left.is_a?(String) && right.is_a?(String)
           String(left) + String(right)
         else
-          raise RuntimeError.new(expr.operator, "Operands must be two numbers or two strings.")
+          raise RuntimeError.new(binary.operator, "Operands must be two numbers or two strings.")
         end
       when TokenType::SLASH
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) / Float(right)
       when TokenType::STAR
-        check_number_operands(expr.operator, left, right)
+        check_number_operands(binary.operator, left, right)
         Float(left) * Float(right)
       else
         nil
