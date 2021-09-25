@@ -4,6 +4,7 @@ require_relative 'rubolox/scanner'
 require_relative 'rubolox/expr'
 require_relative 'rubolox/ast_printer'
 require_relative 'rubolox/parser'
+require_relative 'rubolox/interpreter'
 
 module Rubolox
   @had_error = false
