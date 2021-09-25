@@ -73,7 +73,7 @@ module Rubolox
       return true if a.nil? && b.nil?
       return false if a.nil?
 
-      # FIXME: Java equality
+      # FIXME: Java equals
       a == b
     end
 
