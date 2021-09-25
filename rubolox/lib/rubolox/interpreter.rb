@@ -13,6 +13,7 @@ module Rubolox
 
       case unary.operator.type
       when TokenType::MINUS
+        check_number_opearand(expr.operator, right)
         -Float(right)
       when TokenType::BANG
         !is_truthy(right)
@@ -20,6 +21,16 @@ module Rubolox
         # Unreachable
         nil
       end
+    end
+
+    def check_number_operand(operator, operand)
+      return if operand is_a?(Float)
+      raise RuntimeError.new(operator, "Operand must be a number.")
+    end
+
+    def check_number_operands(operator, left, right)
+      return if left.is_a?(Float) && right.is_a?(Float)
+      raise RuntimeError.new(operator, "Operands must be numbers.")
     end
 
     def visit_binary_expr(binary)
@@ -32,14 +43,19 @@ module Rubolox
       when TokenType::EQUAL_EQUAL
         is_equal(left, right)
       when TokenType::GREATER
+        check_number_operands(expr.operator, left, right)
         Float(left) > Float(right)
       when TokenType::GREATER_EQUAL
+        check_number_operands(expr.operator, left, right)
         Float(left) >= Float(right)
       when TokenType::LESS
+        check_number_operands(expr.operator, left, right)
         Float(left) < Float(right)
       when TokenType::LESS_EQUAL
+        check_number_operands(expr.operator, left, right)
         Float(left) <= Float(right)
       when TokenType::MINUS
+        check_number_operands(expr.operator, left, right)
         Float(left) - Float(right)
       when TokenType::PLUS
         # BK: Ruby doesn't distinguish between native types and their object
@@ -48,10 +64,14 @@ module Rubolox
           Float(left) + Float(right)
         elsif left.is_a?(String) && right.is_a?(String)
           String(left) + String(right)
+        else
+          raise RuntimeError.new(expr.operator, "Operands must be two numbers or two strings.")
         end
       when TokenType::SLASH
+        check_number_operands(expr.operator, left, right)
         Float(left) / Float(right)
       when TokenType::STAR
+        check_number_operands(expr.operator, left, right)
         Float(left) * Float(right)
       else
         nil
