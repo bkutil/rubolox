@@ -17,6 +17,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_variable_expr(expr)
+        raise 'To be implemented'
+      end
+
     end
 
     class Binary < Expr
@@ -67,6 +71,18 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_unary_expr(self)
+      end
+    end
+
+    class Variable < Expr
+      attr_reader :name
+
+      def initialize(name)
+        @name = name
+      end
+
+      def accept(visitor)
+        visitor.visit_variable_expr(self)
       end
     end
 
