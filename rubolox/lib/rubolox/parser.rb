@@ -143,6 +143,7 @@ module Rubolox
 
     def advance
       self.current += 1 unless is_at_end
+      previous
     end
 
     def is_at_end
