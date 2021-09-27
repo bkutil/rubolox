@@ -24,7 +24,7 @@ def define_ast(output_dir, base_name, types)
 end
 
 def define_visitor(f, base_name, types)
-  f.write("    class Visitor\n")
+  f.write("    module Visitor\n")
   types.each do |type|
     type_name = type.split(":").first.strip.downcase
 

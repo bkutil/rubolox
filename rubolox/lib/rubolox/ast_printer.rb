@@ -1,5 +1,7 @@
 module Rubolox
-  class AstPrinter < Expr::Visitor
+  class AstPrinter
+    include  Expr::Visitor
+
     def print(expr)
       expr.accept(self)
     end

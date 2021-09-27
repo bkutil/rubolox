@@ -1,6 +1,6 @@
 module Rubolox
   class Expr
-    class Visitor
+    module Visitor
       def visit_binary_expr(expr)
         raise 'To be implemented'
       end

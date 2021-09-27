@@ -1,5 +1,7 @@
 module Rubolox
-  class Interpreter < Expr::Visitor
+  class Interpreter
+    include  Expr::Visitor
+
     def interpret(expression)
       value = evaluate(expression)
       $stdout.puts(stringify(value))

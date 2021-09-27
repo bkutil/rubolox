@@ -1,6 +1,6 @@
 module Rubolox
   class Stmt
-    class Visitor
+    module Visitor
       def visit_expression_stmt(stmt)
         raise 'To be implemented'
       end
