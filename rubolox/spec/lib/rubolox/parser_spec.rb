@@ -9,10 +9,11 @@ describe Rubolox::Parser do
   let(:tokens) { Rubolox::Scanner.new(source).scan_tokens }
 
   describe "unary" do
-    let(:source) { "-1" }
+    let(:source) { "-1;" }
 
     it "produces the correct AST" do
-      expr = parser.parse
+      stmt = parser.parse.first
+      expr = stmt.expression
 
       _(expr.class).must_equal(Rubolox::Expr::Unary)
       _(expr.operator.type).must_equal(Rubolox::TokenType::MINUS)
@@ -27,10 +28,11 @@ describe Rubolox::Parser do
       "true"  => true
     }.each do |type, value|
       describe type do
-        let(:source) { type }
+        let(:source) { "#{type};" }
 
         it "produces the correct AST" do
-          expr = parser.parse
+          stmt = parser.parse.first
+          expr = stmt.expression
 
           _(expr.class).must_equal(Rubolox::Expr::Literal)
           _(expr.value).must_equal value
@@ -39,10 +41,11 @@ describe Rubolox::Parser do
     end
 
     describe "nil" do
-      let(:source) { "nil" }
+      let(:source) { "nil;" }
 
       it "produces the correct AST" do
-        expr = parser.parse
+        stmt = parser.parse.first
+        expr = stmt.expression
 
         _(expr.class).must_equal(Rubolox::Expr::Literal)
         _(expr.value).must_be_nil
@@ -50,10 +53,11 @@ describe Rubolox::Parser do
     end
 
     describe "strings" do
-      let(:source) { '"hello world"' }
+      let(:source) { '"hello world";' }
 
       it "produces the correct AST" do
-        expr = parser.parse
+        stmt = parser.parse.first
+        expr = stmt.expression
 
         _(expr.class).must_equal(Rubolox::Expr::Literal)
         _(expr.value).must_equal("hello world")
@@ -76,10 +80,11 @@ describe Rubolox::Parser do
     end
 
     describe "equality" do
-      let(:source) { "1 == 1" }
+      let(:source) { "1 == 1;" }
 
       it "produces the correct AST" do
-        expr = parser.parse
+        stmt = parser.parse.first
+        expr = stmt.expression
 
         _(expr.class).must_equal(Rubolox::Expr::Binary)
         _(expr.operator.type).must_equal(Rubolox::TokenType::EQUAL_EQUAL)
@@ -102,10 +107,11 @@ describe Rubolox::Parser do
         end
       end
 
-      let(:source) { '(nil)' }
+      let(:source) { '(nil);' }
 
       it "produces the correct AST" do
-        expr = parser.parse
+        stmt = parser.parse.first
+        expr = stmt.expression
 
         _(expr.class).must_equal(Rubolox::Expr::Grouping)
         _(expr.expression.class).must_equal(Rubolox::Expr::Literal)

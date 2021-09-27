@@ -8,15 +8,39 @@ module Rubolox
     end
 
     def parse
-      expression
-    rescue ParseError
-      nil
+      statements = []
+      while !is_at_end
+        statements << statement
+      end
+      statements
     end
 
     private
 
     def expression
       equality
+    end
+
+    def statement
+      return print_statement if match(TokenType::PRINT)
+
+      expression_statement
+    end
+
+    def print_statement
+      value = expression
+
+      consume(TokenType::SEMICOLON, "Expect ';' after value.")
+
+      Stmt::Print.new(value)
+    end
+
+    def expression_statement
+      value = expression
+
+      consume(TokenType::SEMICOLON, "Expect ';' after expression.")
+
+      Stmt::Expression.new(value)
     end
 
     def equality
