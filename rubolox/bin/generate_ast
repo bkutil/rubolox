@@ -68,3 +68,8 @@ define_ast(output_dir, "Expr", [
   "Literal  : Object value",
   "Unary    : Token operator, Expr right"
 ])
+
+define_ast(output_dir, "Stmt", [
+  "Expression : Expr expression",
+  "Print      : Expr expression"
+])
