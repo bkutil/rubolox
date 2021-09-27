@@ -74,7 +74,42 @@ describe Rubolox::Parser do
 
       it "returns nil" do
         capture_stderr do
-          _(parser.parse).must_be_nil
+          _(parser.parse).must_equal([nil])
+        end
+      end
+    end
+
+    describe "variables" do
+      describe "declarations" do
+        let(:source) { "var a = 1;"; }
+
+        it "produces the correct AST" do
+          stmt = parser.parse.first
+          _(stmt.class).must_equal(Rubolox::Stmt::Var)
+          _(stmt.name.lexeme).must_equal("a")
+          _(stmt.initializer.value).must_equal(1.0)
+        end
+      end
+
+      describe "optional initializer" do
+        let(:source) { "var a;"; }
+
+        it "produces the correct AST" do
+          stmt = parser.parse.first
+          _(stmt.class).must_equal(Rubolox::Stmt::Var)
+          _(stmt.name.lexeme).must_equal("a")
+          _(stmt.initializer).must_be_nil
+        end
+      end
+
+      describe "access" do
+        let(:source) { "a;"; }
+
+        it "produces the correct AST" do
+          stmt = parser.parse.first
+          _(stmt.class).must_equal(Rubolox::Stmt::Expression)
+          _(stmt.expression.class).must_equal(Rubolox::Expr::Variable)
+          _(stmt.expression.name.lexeme).must_equal("a")
         end
       end
     end
@@ -102,7 +137,7 @@ describe Rubolox::Parser do
 
         it "returns nil" do
           capture_stderr do
-            _(parser.parse).must_be_nil
+            _(parser.parse).must_equal([nil])
           end
         end
       end

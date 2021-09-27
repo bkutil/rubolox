@@ -10,7 +10,7 @@ module Rubolox
     def parse
       statements = []
       while !is_at_end
-        statements << statement
+        statements << declaration
       end
       statements
     end
@@ -19,6 +19,15 @@ module Rubolox
 
     def expression
       equality
+    end
+
+    def declaration
+      return var_declaration if match(TokenType::VAR)
+
+      statement
+    rescue ParseError => error
+      synchronize
+      nil
     end
 
     def statement
@@ -33,6 +42,18 @@ module Rubolox
       consume(TokenType::SEMICOLON, "Expect ';' after value.")
 
       Stmt::Print.new(value)
+    end
+
+    def var_declaration
+      name = consume(TokenType::IDENTIFIER, "Expect variable name.")
+
+      initializer = if match(TokenType::EQUAL)
+                      expression
+                    end
+
+      consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.")
+
+      Stmt::Var.new(name, initializer)
     end
 
     def expression_statement
@@ -108,6 +129,10 @@ module Rubolox
 
       if match(TokenType::NUMBER, TokenType::STRING)
         return Expr::Literal.new(previous.literal)
+      end
+
+      if match(TokenType::IDENTIFIER)
+        return Expr::Variable.new(previous)
       end
 
       if match(TokenType::LEFT_PAREN)
