@@ -1,12 +1,25 @@
 module Rubolox
   class Interpreter
-    include  Expr::Visitor
+    include Expr::Visitor
+    include Stmt::Visitor
 
-    def interpret(expression)
-      value = evaluate(expression)
-      $stdout.puts(stringify(value))
+    def interpret(statements)
+      statements.each do |statement|
+        execute(statement)
+      end
     rescue RuntimeError => error
       Rubolox.runtime_error(error)
+    end
+
+    def visit_expression_stmt(stmt)
+      evaluate(stmt.expression)
+      nil
+    end
+
+    def visit_print_stmt(stmt)
+      value = evaluate(stmt.expression)
+      $stdout.puts(stringify(value))
+      nil
     end
 
     def visit_literal_expr(literal)
@@ -120,6 +133,10 @@ module Rubolox
 
     def evaluate(expr)
       expr.accept(self)
+    end
+
+    def execute(stmt)
+      stmt.accept(self)
     end
   end
 end

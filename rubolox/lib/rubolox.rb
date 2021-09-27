@@ -49,11 +49,12 @@ module Rubolox
     tokens = scanner.scan_tokens
 
     parser = Parser.new(tokens)
-    expression = parser.parse
+    statements = parser.parse
 
+    # Stop if there was a syntax error.
     return if @had_error
 
-    @interpreter.interpret(expression)
+    @interpreter.interpret(statements)
   end
 
   def self.error(token_or_line, message)
