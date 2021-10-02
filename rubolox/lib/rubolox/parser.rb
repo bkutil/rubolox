@@ -18,7 +18,7 @@ module Rubolox
     private
 
     def expression
-      equality
+      assignment
     end
 
     def declaration
@@ -62,6 +62,24 @@ module Rubolox
       consume(TokenType::SEMICOLON, "Expect ';' after expression.")
 
       Stmt::Expression.new(value)
+    end
+
+    def assignment
+      expr = equality
+
+      if match(TokenType::EQUAL)
+        equals = previous
+        value = assignment
+
+        if expr.is_a?(Expr::Variable)
+          name = expr.name
+          return Expr::Assign.new(name, value)
+        end
+
+        error(equals, "Invalid assignment target.")
+      end
+
+      expr
     end
 
     def equality

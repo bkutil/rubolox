@@ -1,6 +1,10 @@
 module Rubolox
   class Expr
     module Visitor
+      def visit_assign_expr(expr)
+        raise 'To be implemented'
+      end
+
       def visit_binary_expr(expr)
         raise 'To be implemented'
       end
@@ -21,6 +25,19 @@ module Rubolox
         raise 'To be implemented'
       end
 
+    end
+
+    class Assign < Expr
+      attr_reader :name, :value
+
+      def initialize(name, value)
+        @name = name
+        @value = value
+      end
+
+      def accept(visitor)
+        visitor.visit_assign_expr(self)
+      end
     end
 
     class Binary < Expr

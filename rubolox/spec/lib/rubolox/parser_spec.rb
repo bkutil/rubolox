@@ -8,6 +8,17 @@ describe Rubolox::Parser do
   let(:parser) { Rubolox::Parser.new(tokens) }
   let(:tokens) { Rubolox::Scanner.new(source).scan_tokens }
 
+  describe "assignment" do
+    let(:source) { "a = 1;" }
+
+    it "produces the correct AST" do
+      stmt = parser.parse.first
+      expr = stmt.expression
+
+      _(expr.class).must_equal(Rubolox::Expr::Assign)
+    end
+  end
+
   describe "unary" do
     let(:source) { "-1;" }
 
