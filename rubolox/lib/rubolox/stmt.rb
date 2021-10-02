@@ -1,6 +1,10 @@
 module Rubolox
   class Stmt
     module Visitor
+      def visit_block_stmt(stmt)
+        raise 'To be implemented'
+      end
+
       def visit_expression_stmt(stmt)
         raise 'To be implemented'
       end
@@ -13,6 +17,18 @@ module Rubolox
         raise 'To be implemented'
       end
 
+    end
+
+    class Block < Stmt
+      attr_reader :statements
+
+      def initialize(statements)
+        @statements = statements
+      end
+
+      def accept(visitor)
+        visitor.visit_block_stmt(self)
+      end
     end
 
     class Expression < Stmt

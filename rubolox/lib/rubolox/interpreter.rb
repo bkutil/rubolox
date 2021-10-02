@@ -111,9 +111,14 @@ module Rubolox
       end
     end
 
+    def visit_block_stmt(block)
+      execute_block(block.statements, Environment.new(environment))
+      nil
+    end
+
     private
 
-    attr_reader :environment
+    attr_accessor :environment
 
     def stringify(object)
       return "nil" if object.nil?
@@ -160,6 +165,20 @@ module Rubolox
 
     def execute(stmt)
       stmt.accept(self)
+    end
+
+    def execute_block(statements, environment)
+      previous = self.environment
+
+      begin
+        self.environment = environment
+
+        statements.each do |statement|
+          execute(statement)
+        end
+      ensure
+        self.environment = previous
+      end
     end
   end
 end

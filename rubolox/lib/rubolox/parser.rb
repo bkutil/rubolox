@@ -32,6 +32,7 @@ module Rubolox
 
     def statement
       return print_statement if match(TokenType::PRINT)
+      return Stmt::Block.new(block) if match(TokenType::LEFT_BRACE)
 
       expression_statement
     end
@@ -62,6 +63,18 @@ module Rubolox
       consume(TokenType::SEMICOLON, "Expect ';' after expression.")
 
       Stmt::Expression.new(value)
+    end
+
+    def block
+      statements = []
+
+      while !check(TokenType::RIGHT_BRACE) && !is_at_end
+        statements << declaration
+      end
+
+      consume(TokenType::RIGHT_BRACE, "Expect '}' after block.")
+
+      statements
     end
 
     def assignment

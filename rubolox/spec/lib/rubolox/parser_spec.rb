@@ -8,6 +8,39 @@ describe Rubolox::Parser do
   let(:parser) { Rubolox::Parser.new(tokens) }
   let(:tokens) { Rubolox::Scanner.new(source).scan_tokens }
 
+  describe "blocks" do
+    describe "empty" do
+      let(:source) { "{ }" }
+
+      it "produces the correct AST" do
+        block = parser.parse.first
+        stmt = block.statements
+
+        _(stmt).must_equal []
+      end
+    end
+
+    describe "non-empty" do
+      let(:source) { "{ var a = 1; }" }
+
+      it "produces the correct AST" do
+        block = parser.parse.first
+        stmt = block.statements.first
+
+        _(stmt.class).must_equal(Rubolox::Stmt::Var)
+      end
+    end
+
+    describe "unclosed" do
+      let(:source) { "{" }
+
+      it "reports an error" do
+        output = capture_stderr { parser.parse }
+        _(output.to_s).must_equal "[Line 1] Error at end: Expect '}' after block.\n"
+      end
+    end
+  end
+
   describe "assignment" do
     let(:source) { "a = 1;" }
 
