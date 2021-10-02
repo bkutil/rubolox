@@ -11,6 +11,14 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
   describe "variables" do
+    describe "assignment" do
+      let(:source) { "var a; print a = 1;" }
+
+      it "returns the correct value" do
+        _(output).must_equal("1\n")
+      end
+    end
+
     describe "setting and retrieval" do
       let(:source) { "var a; print a;" }
 

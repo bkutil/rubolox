@@ -33,6 +33,12 @@ module Rubolox
       nil
     end
 
+    def visit_assign_expr(assign)
+      value = evaluate(assign.value)
+      environment.assign(assign.name, value)
+      value
+    end
+
     def visit_literal_expr(literal)
       literal.value
     end

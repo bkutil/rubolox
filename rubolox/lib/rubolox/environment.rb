@@ -10,6 +10,15 @@ module Rubolox
       raise RuntimeError.new(name, "Undefined variable '#{name.lexeme}'.")
     end
 
+    def assign(name, value)
+      if self.values.key?(name.lexeme)
+        self.values[name.lexeme] = value
+        return
+      end
+
+      raise RuntimeError.new(name, "Undefined variable '#{name.lexeme}'.")
+    end
+
     def define(name, value)
       self.values[name] = value
     end
