@@ -1,11 +1,16 @@
 module Rubolox
   class Environment
-    def initialize
+    attr_reader :enclosing
+
+    def initialize(enclosing = nil)
       @values = {}
+      @enclosing = enclosing
     end
 
     def get(name)
       return self.values[name.lexeme] if self.values.key?(name.lexeme)
+
+      return enclosing.get(name) unless enclosing.nil?
 
       raise RuntimeError.new(name, "Undefined variable '#{name.lexeme}'.")
     end
@@ -13,6 +18,11 @@ module Rubolox
     def assign(name, value)
       if self.values.key?(name.lexeme)
         self.values[name.lexeme] = value
+        return
+      end
+
+      unless enclosing.nil?
+        enclosing.assign(name, value)
         return
       end
 
