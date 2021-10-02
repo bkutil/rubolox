@@ -3,6 +3,10 @@ module Rubolox
     include Expr::Visitor
     include Stmt::Visitor
 
+    def initialize
+      @environment = Environment.new
+    end
+
     def interpret(statements)
       statements.each do |statement|
         execute(statement)
@@ -19,6 +23,13 @@ module Rubolox
     def visit_print_stmt(stmt)
       value = evaluate(stmt.expression)
       $stdout.puts(stringify(value))
+      nil
+    end
+
+    def visit_var_stmt(stmt)
+      value = nil
+      value = evaluate(stmt.initializer) unless stmt.initializer.nil?
+      self.environment.define(stmt.name.lexeme, value)
       nil
     end
 
@@ -43,6 +54,10 @@ module Rubolox
         # Unreachable
         nil
       end
+    end
+
+    def visit_variable_expr(variable)
+      self.environment.get(variable.name)
     end
 
     def visit_binary_expr(binary)
@@ -91,6 +106,8 @@ module Rubolox
     end
 
     private
+
+    attr_reader :environment
 
     def stringify(object)
       return "nil" if object.nil?

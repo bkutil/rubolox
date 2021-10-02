@@ -10,6 +10,31 @@ describe Rubolox::Interpreter do
   let(:interpreter) { Rubolox::Interpreter.new }
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
+  describe "variables" do
+    describe "setting and retrieval" do
+      let(:source) { "var a; print a;" }
+
+      it "returns the correct value" do
+        _(output).must_equal("nil\n")
+      end
+    end
+
+    describe "simple variable addition" do
+      let(:source) { "var a = 1; var b = 2; print a + b;" }
+
+      it "returns the correct value" do
+        _(output).must_equal("3\n")
+      end
+    end
+    describe "redeclaration" do
+      let(:source) { "var a = 1; var a = 2; print a;" }
+
+      it "returns the latter value" do
+        _(output).must_equal("2\n")
+      end
+    end
+  end
+
   describe "literals" do
     describe "nil" do
       let(:source) { "print nil;" }
