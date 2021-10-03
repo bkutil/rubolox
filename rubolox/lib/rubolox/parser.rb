@@ -31,10 +31,26 @@ module Rubolox
     end
 
     def statement
+      return if_statement if match(TokenType::IF)
       return print_statement if match(TokenType::PRINT)
       return Stmt::Block.new(block) if match(TokenType::LEFT_BRACE)
 
       expression_statement
+    end
+
+    def if_statement
+      consume(TokenType::LEFT_PAREN, "Expect '(' after 'if'.")
+      condition = expression
+      consume(TokenType::RIGHT_PAREN, "Expect ')' after 'if' condition.")
+
+      then_branch = statement
+      else_branch = nil
+
+      if match(TokenType::ELSE)
+        else_branch = statement
+      end
+
+      Stmt::If.new(condition, then_branch, else_branch)
     end
 
     def print_statement

@@ -120,6 +120,41 @@ describe Rubolox::Interpreter do
       end
     end
 
+    describe "conditionals" do
+      describe "if" do
+        let(:source) { "var a = 1; if (a > 0) { print a; } else { print 0; }" }
+
+        it "prints the correct value" do
+          _(output).must_equal("1\n")
+        end
+      end
+
+      describe "if" do
+        let(:source) { "var a = -1; if (a > 0) { print a; } else { print 0; }" }
+
+        it "prints the correct value" do
+          _(output).must_equal("0\n")
+        end
+      end
+
+      describe "conditional else" do
+        let(:source) { "var a = 1; if (a > 0) { print a; }" }
+
+        it "prints the correct value" do
+          _(output).must_equal("1\n")
+        end
+      end
+
+      describe "dangling else" do
+        let(:source) { "var a = 1; if (a < 0) if (a > 0) print a; else print 0;" }
+
+        it "binds to the nearest if" do
+          _(output).wont_equal("0\n")
+          _(output).must_equal("")
+        end
+      end
+    end
+
     describe "floats" do
       let(:source) { "print 1.1234;" }
 

@@ -9,6 +9,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_if_stmt(stmt)
+        raise 'To be implemented'
+      end
+
       def visit_print_stmt(stmt)
         raise 'To be implemented'
       end
@@ -40,6 +44,20 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_expression_stmt(self)
+      end
+    end
+
+    class If < Stmt
+      attr_reader :condition, :then_branch, :else_branch
+
+      def initialize(condition, then_branch, else_branch)
+        @condition = condition
+        @then_branch = then_branch
+        @else_branch = else_branch
+      end
+
+      def accept(visitor)
+        visitor.visit_if_stmt(self)
       end
     end
 
