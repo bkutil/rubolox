@@ -10,6 +10,17 @@ describe Rubolox::Interpreter do
   let(:interpreter) { Rubolox::Interpreter.new }
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
+  describe "functions" do
+    describe "not callable" do
+      let(:source) { '"totally not a function"();' }
+
+      it "errors out" do
+        output = capture_stderr { interpreter.interpret(ast) }
+        _(output).must_equal "Can only call functions and classes.\n[Line 1]\n"
+      end
+    end
+  end
+
   describe "blocks" do
     describe "complex" do
       let(:source) do

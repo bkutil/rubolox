@@ -148,6 +148,10 @@ module Rubolox
         arguments << evaluate(argument)
       end
 
+      unless callee.class < Rubolox::LoxCallable
+        raise RuntimeError.new(call.paren, "Can only call functions and classes.")
+      end
+
       function = callee
       function.call(self, arguments)
     end
