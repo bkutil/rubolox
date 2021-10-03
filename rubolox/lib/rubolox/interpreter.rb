@@ -139,6 +139,19 @@ module Rubolox
       end
     end
 
+    def visit_call_expr(call)
+      callee = evaluate(call.callee)
+
+      arguments = []
+
+      call.arguments.each do |argument|
+        arguments << evaluate(argument)
+      end
+
+      function = callee
+      function.call(self, arguments)
+    end
+
     def visit_block_stmt(block)
       execute_block(block.statements, Environment.new(environment))
       nil
