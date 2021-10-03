@@ -263,6 +263,9 @@ module Rubolox
       if !check(TokenType::RIGHT_PAREN)
         # BK: begin...end while <cond> makes Matz sad.
         loop do
+          if arguments.size >= 255
+            error(peek(), "Can't have more than 255 arguments.")
+          end
           arguments << expression
           break unless match(TokenType::COMMA)
         end
