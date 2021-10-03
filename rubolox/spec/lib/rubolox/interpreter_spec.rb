@@ -128,6 +128,25 @@ describe Rubolox::Interpreter do
           _(output).must_equal("0\n1\n2\n")
         end
       end
+
+      describe "For" do
+        let(:source) do
+          <<~SRC
+            var a = 0;
+            var temp;
+
+            for (var b = 1; a < 10000; b = temp + b) {
+              print a;
+              temp = a;
+              a = b;
+            }
+          SRC
+        end
+
+        it "prints the correct output" do
+          _(output.split("\n").last.to_i).must_equal(6765)
+        end
+      end
     end
 
     describe "conditionals" do
