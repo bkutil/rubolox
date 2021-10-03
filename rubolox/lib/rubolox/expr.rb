@@ -9,6 +9,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_call_expr(expr)
+        raise 'To be implemented'
+      end
+
       def visit_grouping_expr(expr)
         raise 'To be implemented'
       end
@@ -55,6 +59,20 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_binary_expr(self)
+      end
+    end
+
+    class Call < Expr
+      attr_reader :callee, :paren, :arguments
+
+      def initialize(callee, paren, arguments)
+        @callee = callee
+        @paren = paren
+        @arguments = arguments
+      end
+
+      def accept(visitor)
+        visitor.visit_call_expr(self)
       end
     end
 

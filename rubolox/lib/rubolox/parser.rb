@@ -254,7 +254,37 @@ module Rubolox
         return Expr::Unary.new(operator, right)
       end
 
-      primary
+      call
+    end
+
+    def finish_call(callee)
+      arguments = []
+
+      if !check(TokenType::RIGHT_PAREN)
+        # BK: begin...end while <cond> makes Matz sad.
+        loop do
+          arguments << expression
+          break unless match(TokenType::COMMA)
+        end
+      end
+
+      paren = consume(TokenType::RIGHT_PAREN, "Expect ')' after arguments.")
+
+      Expr::Call.new(callee, paren, arguments)
+    end
+
+    def call
+      expr = primary
+
+      while true
+        if match(TokenType::LEFT_PAREN)
+          expr = finish_call(expr)
+        else
+          break
+        end
+      end
+
+      expr
     end
 
     def primary
