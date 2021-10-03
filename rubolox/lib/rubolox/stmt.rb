@@ -21,6 +21,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_while_stmt(stmt)
+        raise 'To be implemented'
+      end
+
     end
 
     class Block < Stmt
@@ -83,6 +87,19 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_var_stmt(self)
+      end
+    end
+
+    class While < Stmt
+      attr_reader :condition, :body
+
+      def initialize(condition, body)
+        @condition = condition
+        @body = body
+      end
+
+      def accept(visitor)
+        visitor.visit_while_stmt(self)
       end
     end
 

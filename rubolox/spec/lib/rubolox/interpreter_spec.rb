@@ -120,6 +120,16 @@ describe Rubolox::Interpreter do
       end
     end
 
+    describe "loops" do
+      describe "while" do
+        let(:source) { "var i = 0; while (i < 3) { print i; i = i + 1; }" }
+
+        it "prints the correct output" do
+          _(output).must_equal("0\n1\n2\n")
+        end
+      end
+    end
+
     describe "conditionals" do
       describe "logical operators" do
         describe "or" do
