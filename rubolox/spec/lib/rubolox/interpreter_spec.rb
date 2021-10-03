@@ -121,6 +121,44 @@ describe Rubolox::Interpreter do
     end
 
     describe "conditionals" do
+      describe "logical operators" do
+        describe "or" do
+          describe "if truthy" do
+            let(:source) { 'print "hi" or 2;' }
+
+            it "prints the left expression" do
+              _(output).must_equal("hi\n")
+            end
+          end
+
+          describe "if falsey" do
+            let(:source) { 'print nil or "yes";' }
+
+            it "prints the right expression" do
+              _(output).must_equal("yes\n")
+            end
+          end
+        end
+
+        describe "and" do
+          describe "if truthy" do
+            let(:source) { 'print "hi" and 2;' }
+
+            it "prints the right expression" do
+              _(output).must_equal("2\n")
+            end
+          end
+
+          describe "if falsey" do
+            let(:source) { 'print nil and "yes";' }
+
+            it "prints the left expression" do
+              _(output).must_equal("nil\n")
+            end
+          end
+        end
+      end
+
       describe "if" do
         let(:source) { "var a = 1; if (a > 0) { print a; } else { print 0; }" }
 

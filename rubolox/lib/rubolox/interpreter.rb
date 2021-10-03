@@ -52,6 +52,18 @@ module Rubolox
       literal.value
     end
 
+    def visit_logical_expr(logical)
+      left = evaluate(logical.left)
+
+      if (logical.operator.type == TokenType::OR)
+        return left if is_truthy(left)
+      else
+        return left if !is_truthy(left)
+      end
+
+      evaluate(logical.right)
+    end
+
     def visit_grouping_expr(grouping)
       evaluate(grouping.expression)
     end

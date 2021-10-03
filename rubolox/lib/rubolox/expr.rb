@@ -17,6 +17,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_logical_expr(expr)
+        raise 'To be implemented'
+      end
+
       def visit_unary_expr(expr)
         raise 'To be implemented'
       end
@@ -75,6 +79,20 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_literal_expr(self)
+      end
+    end
+
+    class Logical < Expr
+      attr_reader :left, :operator, :right
+
+      def initialize(left, operator, right)
+        @left = left
+        @operator = operator
+        @right = right
+      end
+
+      def accept(visitor)
+        visitor.visit_logical_expr(self)
       end
     end
 

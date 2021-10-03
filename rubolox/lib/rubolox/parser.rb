@@ -94,7 +94,8 @@ module Rubolox
     end
 
     def assignment
-      expr = equality
+      # BK: 'or' is reserved in Ruby
+      expr = or_expression
 
       if match(TokenType::EQUAL)
         equals = previous
@@ -106,6 +107,31 @@ module Rubolox
         end
 
         error(equals, "Invalid assignment target.")
+      end
+
+      expr
+    end
+
+    def or_expression
+      # BK: 'and' is reserved in Ruby
+      expr = and_expression
+
+      if match(TokenType::OR)
+        operator = previous
+        right = and_expression
+        expr = Expr::Logical.new(expr, operator, right)
+      end
+
+      expr
+    end
+
+    def and_expression
+      expr = equality
+
+      if match(TokenType::AND)
+        operator = previous
+        right = equality
+        expr = Expr::Logical.new(expr, operator, right)
       end
 
       expr
