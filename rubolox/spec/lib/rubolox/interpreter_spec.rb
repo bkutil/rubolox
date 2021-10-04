@@ -11,6 +11,39 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
   describe "functions" do
+    describe "native" do
+      describe "execution" do
+        let(:source) do
+          <<~SRC
+          var a = clock();
+          for (var i = 0; i < 10; i = i + 1) { clock(); }
+          print clock() - a;
+          SRC
+        end
+
+        it "executes" do
+          _(output).wont_equal("")
+        end
+      end
+
+      describe "re-assignment" do
+        let(:source) { "print clock; clock = 1; print clock;" }
+
+        it "prints the re-assigned value" do
+          _(output).must_equal("<native fn>\n1\n")
+        end
+      end
+    end
+
+    describe "arity checks" do
+      let(:source) { "clock(1);" }
+
+      it "errors out" do
+        output = capture_stderr { interpreter.interpret(ast) }
+        _(output).must_equal "Expected 0 arguments, but got 1.\n[Line 1]\n"
+      end
+    end
+
     describe "not callable" do
       let(:source) { '"totally not a function"();' }
 

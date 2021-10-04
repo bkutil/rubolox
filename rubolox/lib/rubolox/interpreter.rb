@@ -4,7 +4,24 @@ module Rubolox
     include Stmt::Visitor
 
     def initialize
-      @environment = Environment.new
+      @globals = Environment.new
+      @environment = @globals
+
+      @globals.define("clock", (Class.new do
+        include LoxCallable
+
+        def arity
+          0
+        end
+
+        def call(interpreter, arguments)
+          Time.now.to_f
+        end
+
+        def to_s
+          "<native fn>"
+        end
+      end).new)
     end
 
     def interpret(statements)
@@ -51,7 +68,7 @@ module Rubolox
 
     def visit_assign_expr(assign)
       value = evaluate(assign.value)
-      environment.assign(assign.name, value)
+      self.environment.assign(assign.name, value)
       value
     end
 
@@ -162,13 +179,13 @@ module Rubolox
     end
 
     def visit_block_stmt(block)
-      execute_block(block.statements, Environment.new(environment))
+      execute_block(block.statements, Environment.new(self.environment))
       nil
     end
 
     private
 
-    attr_accessor :environment
+    attr_accessor :environment, :globals
 
     def stringify(object)
       return "nil" if object.nil?
