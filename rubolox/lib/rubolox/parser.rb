@@ -22,6 +22,7 @@ module Rubolox
     end
 
     def declaration
+      return function("function") if match(TokenType::FUN)
       return var_declaration if match(TokenType::VAR)
 
       statement
@@ -141,6 +142,32 @@ module Rubolox
       consume(TokenType::SEMICOLON, "Expect ';' after expression.")
 
       Stmt::Expression.new(value)
+    end
+
+    def function(kind)
+      name = consume(TokenType::IDENTIFIER, "Expect #{kind} name.")
+
+      consume(TokenType::LEFT_PAREN, "Expect '(' after #{kind} name.")
+
+      parameters = []
+
+      if !check(TokenType::RIGHT_PAREN)
+        loop do
+          if parameters.size >= 255
+            error(peek, "Can't have more than 255 parameters.")
+          end
+
+          parameters << consume(TokenType::IDENTIFIER, "Expect parameter name.")
+
+          break unless match(TokenType::COMMA)
+        end
+      end
+
+      consume(TokenType::RIGHT_PAREN, "Expect ')' after parameters.")
+
+      consume(TokenType::LEFT_BRACE, "Expect '{' before #{kind} body.")
+      body = block
+      Stmt::Function.new(name, parameters, body)
     end
 
     def block

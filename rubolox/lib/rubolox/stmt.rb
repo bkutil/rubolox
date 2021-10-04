@@ -9,6 +9,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_function_stmt(stmt)
+        raise 'To be implemented'
+      end
+
       def visit_if_stmt(stmt)
         raise 'To be implemented'
       end
@@ -48,6 +52,20 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_expression_stmt(self)
+      end
+    end
+
+    class Function < Stmt
+      attr_reader :name, :params, :body
+
+      def initialize(name, params, body)
+        @name = name
+        @params = params
+        @body = body
+      end
+
+      def accept(visitor)
+        visitor.visit_function_stmt(self)
       end
     end
 
