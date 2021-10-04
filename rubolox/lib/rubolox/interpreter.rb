@@ -153,6 +153,11 @@ module Rubolox
       end
 
       function = callee
+
+      if arguments.size != function.arity
+        raise RuntimeError.new(call.paren, "Expected #{function.arity} arguments, but got #{arguments.size}.")
+      end
+
       function.call(self, arguments)
     end
 
