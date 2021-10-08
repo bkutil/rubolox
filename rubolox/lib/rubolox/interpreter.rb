@@ -60,6 +60,15 @@ module Rubolox
       nil
     end
 
+    def visit_return_stmt(stmt)
+      value = nil
+      value = evaluate(stmt.value) unless stmt.value.nil?
+
+      # BK: Ruby has throw for exactly this kind of control flow, but let's use
+      # a separate Return exception + raise, and stay closer to the original.
+      raise Return.new(value)
+    end
+
     def visit_var_stmt(stmt)
       value = nil
       value = evaluate(stmt.initializer) unless stmt.initializer.nil?

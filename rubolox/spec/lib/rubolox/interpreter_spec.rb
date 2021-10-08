@@ -11,6 +11,26 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
   describe "functions" do
+    describe "return value" do
+      let(:source) do
+        <<~SRC
+          fun fib(n) {
+            if (n <= 1) return n;
+
+            return fib(n - 2) + fib(n - 1);
+          }
+
+          for (var i = 0; i < 20; i = i + 1) {
+            print fib(i);
+          }
+        SRC
+      end
+
+      it "prints the output" do
+        _(output.split("\n").last).must_equal("4181")
+      end
+    end
+
     describe "printing a value" do
       let(:source) do
         <<~SRC

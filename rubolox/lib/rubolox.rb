@@ -9,6 +9,7 @@ require_relative 'rubolox/runtime_error'
 require_relative 'rubolox/environment'
 require_relative 'rubolox/lox_callable'
 require_relative 'rubolox/lox_function'
+require_relative 'rubolox/return'
 require_relative 'rubolox/interpreter'
 
 module Rubolox

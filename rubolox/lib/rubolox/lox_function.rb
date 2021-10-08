@@ -13,7 +13,11 @@ module Rubolox
         environment.define(param.lexeme, argument)
       end
 
-      interpreter.execute_block(declaration.body, environment)
+      begin
+        interpreter.execute_block(declaration.body, environment)
+      rescue Return => return_value
+        return return_value.value
+      end
 
       nil
     end
