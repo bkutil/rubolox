@@ -7,3 +7,8 @@ Rake::TestTask.new(:spec) do |t|
 end
 
 task default: :spec
+
+task :lines do
+  rb_files = FileList["lib/**/*.rb"]
+  puts %x(wc -l #{rb_files} | tail -1)
+end
