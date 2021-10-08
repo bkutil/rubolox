@@ -2,12 +2,13 @@ module Rubolox
   class LoxFunction
     include LoxCallable
 
-    def initialize(declaration)
+    def initialize(declaration, closure)
+      @closure = closure
       @declaration = declaration
     end
 
     def call(interpreter, arguments)
-      environment = Environment.new(interpreter.globals)
+      environment = Environment.new(closure)
 
       declaration.params.zip(arguments).each do |param, argument|
         environment.define(param.lexeme, argument)
@@ -32,6 +33,6 @@ module Rubolox
 
     private
 
-    attr_accessor :declaration
+    attr_accessor :declaration, :closure
   end
 end

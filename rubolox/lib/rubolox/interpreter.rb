@@ -40,7 +40,7 @@ module Rubolox
     end
 
     def visit_function_stmt(stmt)
-      function = LoxFunction.new(stmt)
+      function = LoxFunction.new(stmt, environment)
       environment.define(stmt.name.lexeme, function)
       nil
     end

@@ -11,6 +11,30 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
   describe "functions" do
+    describe "local functions" do
+      let(:source) do
+        <<~SRC
+          fun makeCounter() {
+            var i = 0;
+            fun count() {
+              i = i + 1;
+              print i;
+            }
+
+            return count;
+          }
+
+          var counter = makeCounter();
+          counter();
+          counter();
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("1\n2\n")
+      end
+    end
+
     describe "return value" do
       let(:source) do
         <<~SRC
@@ -26,7 +50,7 @@ describe Rubolox::Interpreter do
         SRC
       end
 
-      it "prints the output" do
+      it "executes correctly" do
         _(output.split("\n").last).must_equal("4181")
       end
     end
