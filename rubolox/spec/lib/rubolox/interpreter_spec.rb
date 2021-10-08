@@ -11,6 +11,39 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
   describe "functions" do
+    describe "printing a value" do
+      let(:source) do
+        <<~SRC
+          fun add(a, b) {
+            print a + b;
+          }
+
+          print add;
+        SRC
+      end
+
+      it "prints the function name" do
+        _(output).must_equal("<fn add>\n")
+      end
+    end
+
+    describe "invocation" do
+      let(:source) do
+        <<~SRC
+          fun count(n) {
+            if (n > 1) count(n - 1);
+            print n;
+          }
+
+          count(3);
+        SRC
+      end
+
+      it "executes" do
+        _(output).must_equal("1\n2\n3\n")
+      end
+    end
+
     describe "native" do
       describe "execution" do
         let(:source) do

@@ -3,6 +3,8 @@ module Rubolox
     include Expr::Visitor
     include Stmt::Visitor
 
+    attr_accessor :globals
+
     def initialize
       @globals = Environment.new
       @environment = @globals
@@ -34,6 +36,12 @@ module Rubolox
 
     def visit_expression_stmt(stmt)
       evaluate(stmt.expression)
+      nil
+    end
+
+    def visit_function_stmt(stmt)
+      function = LoxFunction.new(stmt)
+      environment.define(stmt.name.lexeme, function)
       nil
     end
 
@@ -183,9 +191,23 @@ module Rubolox
       nil
     end
 
+    def execute_block(statements, environment)
+      previous = self.environment
+
+      begin
+        self.environment = environment
+
+        statements.each do |statement|
+          execute(statement)
+        end
+      ensure
+        self.environment = previous
+      end
+    end
+
     private
 
-    attr_accessor :environment, :globals
+    attr_accessor :environment
 
     def stringify(object)
       return "nil" if object.nil?
@@ -232,20 +254,6 @@ module Rubolox
 
     def execute(stmt)
       stmt.accept(self)
-    end
-
-    def execute_block(statements, environment)
-      previous = self.environment
-
-      begin
-        self.environment = environment
-
-        statements.each do |statement|
-          execute(statement)
-        end
-      ensure
-        self.environment = previous
-      end
     end
   end
 end
