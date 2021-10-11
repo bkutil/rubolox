@@ -28,6 +28,12 @@ module Rubolox
       nil
     end
 
+    def visit_assign_expr(expr)
+      resolve(expr.value)
+      resolve_local(expr, expr.name)
+      nil
+    end
+
     def visit_variable_expr(expr)
       if !self.scopes.empty? && self.scopes.first[expr.name.lexeme] == false
         Rubolox.error(expr.name, "Can't read local variable in its own initializer.")
