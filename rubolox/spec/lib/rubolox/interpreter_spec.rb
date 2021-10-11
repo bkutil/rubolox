@@ -11,6 +11,30 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { interpreter.interpret(ast) } }
 
   describe "functions" do
+    describe "closures" do
+      let(:source) do
+        <<~SRC
+        var a = "global";
+
+        {
+          fun showA() {
+            print a;
+          }
+
+          showA();
+
+          var a = "block";
+
+          showA();
+        }
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("global\nglobal\n")
+      end
+    end
+
     describe "local functions" do
       let(:source) do
         <<~SRC
