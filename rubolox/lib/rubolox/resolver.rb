@@ -21,7 +21,16 @@ module Rubolox
       nil
     end
 
+    def visit_var_stmt(stmt)
+      declare(stmt.name)
+      resolve(stmt.initializer) unless stmt.initializer.nil?
+      define(stmt.name)
+      nil
+    end
+
     private
+
+    attr_accessor :interpreter, :scopes
 
     def begin_scope
       scopes.push {}
@@ -31,7 +40,18 @@ module Rubolox
       scopes.pop
     end
 
-    attr_accessor :interpreter, :scopes
+    def declare(name)
+      return if self.scopes.empty?
+
+      scope = self.scopes.first
+      scope[name.lexeme] = false
+    end
+
+    def define(name)
+      return if self.scopes.empty?
+
+      self.scopes.first[name.lexeme] = true
+    end
 
     # BK: without overloading there's one resolve method for both statements
     # and expressions.
