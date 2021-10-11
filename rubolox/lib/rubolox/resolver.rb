@@ -28,6 +28,15 @@ module Rubolox
       nil
     end
 
+    def visit_variable_expr(expr)
+      if !self.scopes.empty? && self.scopes.first[expr.name.lexeme] == false
+        Rubolox.error(expr.name, "Can't read local variable in its own initializer.")
+      end
+
+      resolve_local(expr, expr.name)
+      nil
+    end
+
     private
 
     attr_accessor :interpreter, :scopes
@@ -51,6 +60,15 @@ module Rubolox
       return if self.scopes.empty?
 
       self.scopes.first[name.lexeme] = true
+    end
+
+    def resolve_local(expr, name)
+      self.scopes.each_with_index.reverse_each do |scope, i|
+        if scope.key?(name.lexeme)
+          interpreter.resolve(expr, self.scopes.size - 1 - i)
+          return
+        end
+      end
     end
 
     # BK: without overloading there's one resolve method for both statements
