@@ -86,7 +86,14 @@ module Rubolox
 
     def visit_assign_expr(assign)
       value = evaluate(assign.value)
-      self.environment.assign(assign.name, value)
+      distance = self.locals[assign]
+
+      if !distance.nil?
+        self.environment.assign_at(distance, assign.name, value)
+      else
+        self.globals.assign(assign.name, value)
+      end
+
       value
     end
 

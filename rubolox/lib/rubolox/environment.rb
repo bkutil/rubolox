@@ -37,6 +37,10 @@ module Rubolox
       self.ancestor(distance).values[name]
     end
 
+    def assign_at(distance, name, value)
+      self.ancestor(distance).values[name.lexeme] = value
+    end
+
     def ancestor(distance)
       environment = self
       distance.times { environment = environment.enclosing }
