@@ -21,6 +21,13 @@ module Rubolox
       nil
     end
 
+    def visit_function_stmt(stmt)
+      declare(stmt.name)
+      define(stmt.name)
+      resolve_function(stmt)
+      nil
+    end
+
     def visit_var_stmt(stmt)
       declare(stmt.name)
       resolve(stmt.initializer) unless stmt.initializer.nil?
@@ -81,6 +88,16 @@ module Rubolox
     # and expressions.
     def resolve(stmt_or_expression)
       stmt_or_expression.accept(self)
+    end
+
+    def resolve_function(function)
+      begin_scope
+      function.params.each do |param|
+        declare(param)
+        define(param)
+      end
+      resolve(function.body)
+      end_scope
     end
   end
 end
