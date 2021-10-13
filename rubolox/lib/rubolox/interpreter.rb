@@ -7,6 +7,7 @@ module Rubolox
 
     def initialize
       @globals = Environment.new
+      @locals = {}
       @environment = @globals
 
       @globals.define("clock", (Class.new do
@@ -216,7 +217,7 @@ module Rubolox
 
     private
 
-    attr_accessor :environment
+    attr_accessor :environment, :locals
 
     def stringify(object)
       return "nil" if object.nil?
@@ -263,6 +264,10 @@ module Rubolox
 
     def execute(stmt)
       stmt.accept(self)
+    end
+
+    def resolve(expr, depth)
+      self.locals[expr] = depth
     end
   end
 end
