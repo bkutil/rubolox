@@ -1,6 +1,6 @@
 module Rubolox
   class Environment
-    attr_reader :enclosing
+    attr_reader :enclosing, :values
 
     def initialize(enclosing = nil)
       @values = {}
@@ -33,8 +33,14 @@ module Rubolox
       self.values[name] = value
     end
 
-    private
+    def get_at(distance, name)
+      self.ancestor(distance).values[name]
+    end
 
-    attr_reader :values
+    def ancestor(distance)
+      environment = self
+      distance.times { environment = environment.enclosing }
+      environment
+    end
   end
 end

@@ -126,7 +126,17 @@ module Rubolox
     end
 
     def visit_variable_expr(variable)
-      self.environment.get(variable.name)
+      look_up_variable(variable.name, variable)
+    end
+
+    def look_up_variable(name, expr)
+      distance = self.locals[expr]
+
+      if !distance.nil?
+        self.environment.get_at(distance, name.lexeme)
+      else
+        self.globals.get(name)
+      end
     end
 
     def visit_binary_expr(binary)
