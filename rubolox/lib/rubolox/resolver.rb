@@ -21,10 +21,38 @@ module Rubolox
       nil
     end
 
+    def visit_expression_stmt(stmt)
+      resolve(stmt.expression)
+      nil
+    end
+
     def visit_function_stmt(stmt)
       declare(stmt.name)
       define(stmt.name)
       resolve_function(stmt)
+      nil
+    end
+
+    def visit_if_stmt(stmt)
+      resolve(stmt.condition)
+      resolve(stmt.then_branch)
+      resolve(stmt.else_branch) unless stmt.else_branch.nil?
+      nil
+    end
+
+    def visit_print_stmt(stmt)
+      resolve(stmt.expression)
+      nil
+    end
+
+    def visit_return_stmt(stmt)
+      resolve(stmt.value) unless stmt.value.nil?
+      nil
+    end
+
+    def visit_while_stmt(stmt)
+      resolve(stmt.condition)
+      resolve(stmt.body)
       nil
     end
 
@@ -38,6 +66,42 @@ module Rubolox
     def visit_assign_expr(expr)
       resolve(expr.value)
       resolve_local(expr, expr.name)
+      nil
+    end
+
+    def visit_binary_expr(expr)
+      resolve(expr.left)
+      resolve(expr.right)
+      nil
+    end
+
+    def visit_call_expr(expr)
+      resolve(expr.callee)
+
+      expr.arguments.each do |argument|
+        resolve(argument)
+      end
+
+      nil
+    end
+
+    def visit_grouping_expr(expr)
+      resolve(expr.expression)
+      nil
+    end
+
+    def visit_literal_expr(expr)
+      nil
+    end
+
+    def visit_logical_expr(expr)
+      resolve(expr.left)
+      resolve(expr.right)
+      nil
+    end
+
+    def visit_unary_expr(expr)
+      resolve(expr.right)
       nil
     end
 
