@@ -59,6 +59,9 @@ module Rubolox
     # Stop if there was a syntax error.
     return if @had_error
 
+    resolver = Resolver.new(@interpreter)
+    resolver.resolve(statements)
+
     @interpreter.interpret(statements)
   end
 
