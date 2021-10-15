@@ -140,9 +140,9 @@ module Rubolox
     end
 
     def resolve_local(expr, name)
-      self.scopes.each_with_index.reverse_each do |scope, i|
-        if scope.key?(name.lexeme)
-          interpreter.resolve(expr, self.scopes.size - 1 - i)
+      (self.scopes.size - 1).downto(0) do |i|
+        if self.scopes[i].key?(name.lexeme)
+          self.interpreter.resolve(expr, self.scopes.size - 1 - i)
           return
         end
       end
