@@ -10,6 +10,7 @@ describe Rubolox::Interpreter do
   let(:interpreter) { Rubolox::Interpreter.new }
   let(:resolver) { Rubolox::Resolver.new(interpreter) }
   let(:output) { capture_stdout { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
+  let(:errors) { capture_stderr { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
 
   describe "functions" do
     describe "closures" do
@@ -141,8 +142,7 @@ describe Rubolox::Interpreter do
       let(:source) { "clock(1);" }
 
       it "errors out" do
-        output = capture_stderr { interpreter.interpret(ast) }
-        _(output).must_equal "Expected 0 arguments, but got 1.\n[Line 1]\n"
+        _(errors).must_equal "Expected 0 arguments, but got 1.\n[Line 1]\n"
       end
     end
 
@@ -150,8 +150,7 @@ describe Rubolox::Interpreter do
       let(:source) { '"totally not a function"();' }
 
       it "errors out" do
-        output = capture_stderr { interpreter.interpret(ast) }
-        _(output).must_equal "Can only call functions and classes.\n[Line 1]\n"
+        _(errors).must_equal "Can only call functions and classes.\n[Line 1]\n"
       end
     end
   end
