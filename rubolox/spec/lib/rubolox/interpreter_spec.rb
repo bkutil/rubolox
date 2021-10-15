@@ -213,6 +213,21 @@ describe Rubolox::Interpreter do
         _(output).must_equal("2\n1\n")
       end
     end
+
+    describe "local variable shadowing" do
+      let(:source) do
+        <<~SRC
+          fun bad() {
+            var a = "first";
+            var a = "second";
+          }
+        SRC
+      end
+
+      it "errors out" do
+        _(errors).must_include "Error at 'a': already a variable"
+      end
+    end
   end
 
   describe "variables" do

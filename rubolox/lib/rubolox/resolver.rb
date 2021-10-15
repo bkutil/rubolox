@@ -136,6 +136,11 @@ module Rubolox
       return if self.scopes.empty?
 
       scope = self.scopes.last
+
+      if scope.key?(name.lexeme)
+        Rubolox.error(name, "already a variable with this name in this scope.")
+      end
+
       scope[name.lexeme] = false
     end
 
