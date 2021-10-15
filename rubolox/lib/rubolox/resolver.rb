@@ -129,14 +129,14 @@ module Rubolox
     def declare(name)
       return if self.scopes.empty?
 
-      scope = self.scopes.first
+      scope = self.scopes.last
       scope[name.lexeme] = false
     end
 
     def define(name)
       return if self.scopes.empty?
 
-      self.scopes.first[name.lexeme] = true
+      self.scopes.last[name.lexeme] = true
     end
 
     def resolve_local(expr, name)
