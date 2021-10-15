@@ -8,7 +8,12 @@ module Rubolox
       @scopes = []
     end
 
-    def resolve(statements)
+    # BK: in the original code, there are three methods with a different
+    # signature called 'resolve' in this class. Rather than going w/ is_a?
+    # checks, or renaming the private method (or prefixing it with e.g. _), we
+    # diverge from the book and use 'resolve_variables' as the public method
+    # name.
+    def resolve_variables(statements)
       statements.each do |statement|
         resolve(statement)
       end
@@ -16,7 +21,8 @@ module Rubolox
 
     def visit_block_stmt(stmt)
       begin_scope
-      resolve(stmt.statements)
+      # BK: list of statements, i.e. call the renamed resolve method.
+      resolve_variables(stmt.statements)
       end_scope
       nil
     end
@@ -160,7 +166,9 @@ module Rubolox
         declare(param)
         define(param)
       end
-      resolve(function.body)
+      # BK: function body is a list of statements, so we need to call the
+      # renamed resolve method.
+      resolve_variables(function.body)
       end_scope
     end
   end
