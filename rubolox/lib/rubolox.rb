@@ -60,7 +60,7 @@ module Rubolox
     return if @had_error
 
     resolver = Resolver.new(@interpreter)
-    resolver.resolve(statements)
+    resolver.resolve_variables(statements)
 
     @interpreter.interpret(statements)
   end
