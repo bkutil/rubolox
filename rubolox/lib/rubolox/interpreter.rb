@@ -283,7 +283,7 @@ module Rubolox
       stmt.accept(self)
     end
 
-    def resolve(expr, depth)
+    public def resolve(expr, depth)
       self.locals[expr] = depth
     end
   end
