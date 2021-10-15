@@ -119,11 +119,11 @@ module Rubolox
     attr_accessor :interpreter, :scopes
 
     def begin_scope
-      scopes.push {}
+      self.scopes.push({})
     end
 
     def end_scope
-      scopes.pop
+      self.scopes.pop
     end
 
     def declare(name)
