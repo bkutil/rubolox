@@ -3,7 +3,7 @@ module Rubolox
     include Expr::Visitor
     include Stmt::Visitor
 
-    def initializer(interpreter)
+    def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
     end
