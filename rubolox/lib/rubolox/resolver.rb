@@ -3,9 +3,15 @@ module Rubolox
     include Expr::Visitor
     include Stmt::Visitor
 
+    module FunctionType
+      NONE = :NONE
+      FUNCTION = :FUNCTION
+    end
+
     def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
+      @current_function = FunctionType::NONE
     end
 
     # BK: in the original code, there are three methods with a different
@@ -35,7 +41,7 @@ module Rubolox
     def visit_function_stmt(stmt)
       declare(stmt.name)
       define(stmt.name)
-      resolve_function(stmt)
+      resolve_function(stmt, FunctionType::FUNCTION)
       nil
     end
 
@@ -52,6 +58,9 @@ module Rubolox
     end
 
     def visit_return_stmt(stmt)
+      if self.current_function == FunctionType::NONE
+        Rubolox.error(stmt.keyword, "Can't return from top level code.")
+      end
       resolve(stmt.value) unless stmt.value.nil?
       nil
     end
@@ -122,7 +131,7 @@ module Rubolox
 
     private
 
-    attr_accessor :interpreter, :scopes
+    attr_accessor :interpreter, :scopes, :current_function
 
     def begin_scope
       self.scopes.push({})
@@ -165,7 +174,9 @@ module Rubolox
       stmt_or_expression.accept(self)
     end
 
-    def resolve_function(function)
+    def resolve_function(function, type)
+      enclosing_function = self.current_function
+      self.current_function = type
       begin_scope
       function.params.each do |param|
         declare(param)
@@ -175,6 +186,7 @@ module Rubolox
       # renamed resolve method.
       resolve_variables(function.body)
       end_scope
+      self.current_function = enclosing_function
     end
   end
 end

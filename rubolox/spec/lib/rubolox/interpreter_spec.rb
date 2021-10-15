@@ -230,6 +230,15 @@ describe Rubolox::Interpreter do
     end
   end
 
+  describe "top level return" do
+    let(:source) { 'return "at top level";' }
+    let(:errors) { capture_stderr { resolver.resolve_variables(ast); } }
+
+    it "errors out" do
+      _(errors).must_include "Can't return from top level code"
+    end
+  end
+
   describe "variables" do
     describe "assignment" do
       let(:source) { "var a; print a = 1;" }

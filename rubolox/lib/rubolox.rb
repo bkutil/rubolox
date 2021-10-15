@@ -62,6 +62,9 @@ module Rubolox
     resolver = Resolver.new(@interpreter)
     resolver.resolve_variables(statements)
 
+    # Stop if there was a resolution error.
+    return if @had_error
+
     @interpreter.interpret(statements)
   end
 
