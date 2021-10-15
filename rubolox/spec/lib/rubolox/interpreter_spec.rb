@@ -8,7 +8,8 @@ describe Rubolox::Interpreter do
   let(:ast) { Rubolox::Parser.new(tokens).parse }
   let(:tokens) { Rubolox::Scanner.new(source).scan_tokens }
   let(:interpreter) { Rubolox::Interpreter.new }
-  let(:output) { capture_stdout { interpreter.interpret(ast) } }
+  let(:resolver) { Rubolox::Resolver.new(interpreter) }
+  let(:output) { capture_stdout { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
 
   describe "functions" do
     describe "closures" do
