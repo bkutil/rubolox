@@ -4,8 +4,9 @@ module Rubolox
     include Stmt::Visitor
 
     module FunctionType
-      NONE = :NONE
       FUNCTION = :FUNCTION
+      NONE = :NONE
+      METHOD = :METHOD
     end
 
     def initialize(interpreter)
@@ -36,6 +37,12 @@ module Rubolox
     def visit_class_stmt(stmt)
       declare(stmt.name)
       define(stmt.name)
+
+      stmt.methods.each do |method|
+        declaration = FunctionType::METHOD
+        resolve_function(method, declaration)
+      end
+
       nil
     end
 

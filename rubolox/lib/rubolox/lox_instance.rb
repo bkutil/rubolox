@@ -10,6 +10,9 @@ module Rubolox
     def get(name)
       return fields[name.lexeme] if fields.key?(name.lexeme)
 
+      method = klass.find_method(name.lexeme)
+      return method unless method.nil?
+
       raise RuntimeError.new(name, "Undefined property '#{name.lexeme}'.")
     end
 

@@ -47,6 +47,24 @@ describe Rubolox::Interpreter do
       end
     end
 
+    describe "method lookup" do
+      let(:source) do
+        <<~SRC
+        class Bacon {
+          eat() {
+            print "Crunch crunch crunch";
+          }
+        }
+
+        Bacon().eat();
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("Crunch crunch crunch\n")
+      end
+    end
+
     describe "getters/setters" do
       let(:source) do
         <<~SRC
@@ -60,6 +78,55 @@ describe Rubolox::Interpreter do
 
       it "executes correctly" do
         _(output).must_equal("cheese\n")
+      end
+    end
+
+    describe "field method shadowing" do
+      let(:source) do
+        <<~SRC
+        class Person {
+          sayName() {
+            print this.name;
+          }
+        }
+
+        var jane = Person();
+        jane.name = "Jane";
+
+        jane.sayName();
+        jane.sayName = "Mary";
+
+        print jane.sayName;
+        SRC
+      end
+
+      it "gives priority to fields" do
+        _(output).must_equal("Jane\nMary")
+      end
+    end
+
+    describe "method rebinding" do
+      let(:source) do
+        <<~SRC
+        class Person {
+          sayName() {
+            print this.name;
+          }
+        }
+
+        var jane = Person();
+        jane.name = "Jane";
+
+        var bill = Person();
+        bill.name = "Bill";
+
+        bill.sayName = jane.sayName;
+        bill.sayName();
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("Jane\n")
       end
     end
   end
