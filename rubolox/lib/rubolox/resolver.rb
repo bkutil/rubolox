@@ -126,6 +126,12 @@ module Rubolox
       nil
     end
 
+    def visit_set_expr(expr)
+      resolve(expr.value)
+      resolve(expr.object)
+      nil
+    end
+
     def visit_unary_expr(expr)
       resolve(expr.right)
       nil

@@ -113,6 +113,18 @@ module Rubolox
       evaluate(logical.right)
     end
 
+    def visit_set_expr(set)
+      object = evaluate(set.object)
+
+      if !object.is_a?(LoxInstance)
+        raise RuntimeError.new(expr.name, "Only instances have fields.")
+      end
+
+      value = evaluate(set.value)
+      object.set(set.name, value)
+      value
+    end
+
     def visit_grouping_expr(grouping)
       evaluate(grouping.expression)
     end

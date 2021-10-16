@@ -29,6 +29,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_set_expr(expr)
+        raise 'To be implemented'
+      end
+
       def visit_unary_expr(expr)
         raise 'To be implemented'
       end
@@ -128,6 +132,20 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_logical_expr(self)
+      end
+    end
+
+    class Set < Expr
+      attr_reader :object, :name, :value
+
+      def initialize(object, name, value)
+        @object = object
+        @name = name
+        @value = value
+      end
+
+      def accept(visitor)
+        visitor.visit_set_expr(self)
       end
     end
 

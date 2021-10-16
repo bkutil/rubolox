@@ -46,6 +46,22 @@ describe Rubolox::Interpreter do
         _(output).must_equal("Bagel instance\n")
       end
     end
+
+    describe "getters/setters" do
+      let(:source) do
+        <<~SRC
+        class Bagel {}
+        var bagel = Bagel();
+
+        bagel.filling = "cheese";
+        print bagel.filling;
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("cheese\n")
+      end
+    end
   end
 
   describe "functions" do

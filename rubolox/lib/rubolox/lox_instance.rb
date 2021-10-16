@@ -13,6 +13,11 @@ module Rubolox
       raise RuntimeError.new(name, "Undefined property '#{name.lexeme}'.")
     end
 
+    def set(name, value)
+      fields[name.lexeme] = value
+      nil
+    end
+
     def to_s
       "#{klass.name} instance"
     end
