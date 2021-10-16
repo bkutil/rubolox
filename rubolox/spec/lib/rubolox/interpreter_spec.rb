@@ -31,6 +31,21 @@ describe Rubolox::Interpreter do
         _(output).must_equal("DevonshireCream\n")
       end
     end
+
+    describe "constructor" do
+      let(:source) do
+        <<~SRC
+        class Bagel {}
+        var bagel = Bagel();
+
+        print bagel;
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("Bagel instance\n")
+      end
+    end
   end
 
   describe "functions" do
