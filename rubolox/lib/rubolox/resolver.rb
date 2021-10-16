@@ -33,6 +33,12 @@ module Rubolox
       nil
     end
 
+    def visit_class_stmt(stmt)
+      declare(stmt.name)
+      define(stmt.name)
+      nil
+    end
+
     def visit_expression_stmt(stmt)
       resolve(stmt.expression)
       nil

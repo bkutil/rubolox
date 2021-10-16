@@ -12,6 +12,27 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
   let(:errors) { capture_stderr { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
 
+
+  describe "classes" do
+    describe "parsing" do
+      let(:source) do
+        <<~SRC
+        class DevonshireCream {
+          serveOn() {
+            return "Scones";
+          }
+        }
+
+        print DevonshireCream;
+        SRC
+      end
+
+      it "executes correctly" do
+        _(output).must_equal("DevonshireCream\n")
+      end
+    end
+  end
+
   describe "functions" do
     describe "closures" do
       let(:source) do

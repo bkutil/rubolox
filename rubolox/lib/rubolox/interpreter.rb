@@ -218,6 +218,13 @@ module Rubolox
       nil
     end
 
+    def visit_class_stmt(stmt)
+      self.environment.define(stmt.name.lexeme, nil)
+      klass = LoxClass.new(stmt.name.lexeme)
+      self.environment.assign(stmt.name, klass)
+      nil
+    end
+
     def execute_block(statements, environment)
       previous = self.environment
 

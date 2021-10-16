@@ -22,6 +22,7 @@ module Rubolox
     end
 
     def declaration
+      return class_declaration if match(TokenType::CLASS)
       return function("function") if match(TokenType::FUN)
       return var_declaration if match(TokenType::VAR)
 
@@ -29,6 +30,20 @@ module Rubolox
     rescue ParseError => error
       synchronize
       nil
+    end
+
+    def class_declaration
+      name = consume(TokenType::IDENTIFIER, "Expect class name.")
+      consume(TokenType::LEFT_BRACE, "Expect '{' before class body.")
+
+      methods = []
+      while !check(TokenType::RIGHT_BRACE) && !is_at_end
+        methods << function("method")
+      end
+
+      consume(TokenType::RIGHT_BRACE, "Expect '}' after class body.")
+
+      Stmt::Class.new(name, methods)
     end
 
     def statement
