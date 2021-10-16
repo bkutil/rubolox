@@ -213,6 +213,14 @@ module Rubolox
       function.call(self, arguments)
     end
 
+    def visit_get_expr(get)
+      object = evaluate(get.object)
+
+      return object.get(get.name) if object.is_a?(LoxInstance)
+
+      raise RuntimeError.new(get.name, "Only instances have properties")
+    end
+
     def visit_block_stmt(block)
       execute_block(block.statements, Environment.new(self.environment))
       nil

@@ -13,6 +13,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_get_expr(expr)
+        raise 'To be implemented'
+      end
+
       def visit_grouping_expr(expr)
         raise 'To be implemented'
       end
@@ -73,6 +77,19 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_call_expr(self)
+      end
+    end
+
+    class Get < Expr
+      attr_reader :object, :name
+
+      def initialize(object, name)
+        @object = object
+        @name = name
+      end
+
+      def accept(visitor)
+        visitor.visit_get_expr(self)
       end
     end
 

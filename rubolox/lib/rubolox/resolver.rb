@@ -106,6 +106,11 @@ module Rubolox
       nil
     end
 
+    def visit_get_expr(expr)
+      resolve(expr.object)
+      nil
+    end
+
     def visit_grouping_expr(expr)
       resolve(expr.expression)
       nil
