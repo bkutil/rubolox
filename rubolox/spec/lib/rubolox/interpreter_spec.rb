@@ -101,7 +101,51 @@ describe Rubolox::Interpreter do
       end
 
       it "gives priority to fields" do
-        _(output).must_equal("Jane\nMary")
+        _(output).must_equal("Jane\nMary\n")
+      end
+    end
+
+    describe "method binding" do
+      describe "this - property" do
+        let(:source) do
+          <<~SRC
+          class Egotist {
+            speak() {
+              print this;
+            }
+          }
+
+          var method = Egotist().speak;
+          method();
+          SRC
+        end
+
+        it "executes correctly" do
+          _(output).must_equal("Egotist instance\n")
+        end
+      end
+
+      describe "this - nested" do
+        let(:source) do
+          <<~SRC
+          class Thing {
+            getCallback() {
+              fun localFunction() {
+                print this;
+              }
+
+              return localFunction;
+            }
+          }
+
+          var callback = Thing().getCallback();
+          callback();
+          SRC
+        end
+
+        it "executes correctly" do
+          _(output).must_equal("Thing instance\n")
+        end
       end
     end
 

@@ -125,6 +125,10 @@ module Rubolox
       value
     end
 
+    def visit_this_expr(this)
+      look_up_variable(this.keyword, this)
+    end
+
     def visit_grouping_expr(grouping)
       evaluate(grouping.expression)
     end

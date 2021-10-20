@@ -361,6 +361,10 @@ module Rubolox
         return Expr::Literal.new(previous.literal)
       end
 
+      if match(TokenType::THIS)
+        return Expr::This.new(previous)
+      end
+
       if match(TokenType::IDENTIFIER)
         return Expr::Variable.new(previous)
       end

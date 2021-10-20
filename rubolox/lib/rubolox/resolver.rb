@@ -38,10 +38,15 @@ module Rubolox
       declare(stmt.name)
       define(stmt.name)
 
+      begin_scope
+      self.scopes.last["this"] = true
+
       stmt.methods.each do |method|
         declaration = FunctionType::METHOD
         resolve_function(method, declaration)
       end
+
+      end_scope
 
       nil
     end
@@ -136,6 +141,11 @@ module Rubolox
     def visit_set_expr(expr)
       resolve(expr.value)
       resolve(expr.object)
+      nil
+    end
+
+    def visit_this_expr(expr)
+      resolve_local(expr, expr.keyword)
       nil
     end
 
