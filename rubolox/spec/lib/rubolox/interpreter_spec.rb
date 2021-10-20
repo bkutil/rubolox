@@ -63,6 +63,43 @@ describe Rubolox::Interpreter do
           _(output).must_equal("crispy\n")
         end
 
+        describe "explicit return with a value" do
+          let(:source) do
+            <<~SRC
+              class Foo {
+                init() {
+                  return "something else";
+                }
+              }
+            SRC
+          end
+          let(:errors) { capture_stderr { resolver.resolve_variables(ast) } }
+
+          it "errors out" do
+            _(errors).must_include("Can't return a value from an initializer.")
+          end
+        end
+
+        describe "explicit return without value is this" do
+          let(:source) do
+            <<~SRC
+              class Foo {
+                init() {
+                  return;
+                }
+              }
+
+              var foo = Foo();
+              print foo;
+              print foo.init();
+            SRC
+          end
+
+          it "executes correctly" do
+            _(output).must_equal("Foo instance\nFoo instance\n")
+          end
+        end
+
         describe "implicit return value is this" do
           let(:source) do
             <<~SRC

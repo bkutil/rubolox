@@ -5,6 +5,7 @@ module Rubolox
 
     module FunctionType
       FUNCTION = :FUNCTION
+      INITIALIZER = :INITIALIZER
       NONE = :NONE
       METHOD = :METHOD
     end
@@ -52,6 +53,9 @@ module Rubolox
 
       stmt.methods.each do |method|
         declaration = FunctionType::METHOD
+        if method.name.lexeme == "init"
+          declaration = FunctionType::INITIALIZER
+        end
         resolve_function(method, declaration)
       end
 
@@ -89,7 +93,13 @@ module Rubolox
       if self.current_function == FunctionType::NONE
         Rubolox.error(stmt.keyword, "Can't return from top level code.")
       end
-      resolve(stmt.value) unless stmt.value.nil?
+      if !stmt.value.nil?
+        if self.current_function == FunctionType::INITIALIZER
+          Rubolox.error(stmt.keyword, "Can't return a value from an initializer.")
+        end
+
+        resolve(stmt.value)
+      end
       nil
     end
 

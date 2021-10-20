@@ -24,6 +24,7 @@ module Rubolox
       begin
         interpreter.execute_block(declaration.body, environment)
       rescue Return => return_value
+        return closure.get_at(0, "this") if is_initializer
         return return_value.value
       end
 
