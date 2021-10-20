@@ -44,6 +44,42 @@ describe Rubolox::Interpreter do
       it "executes correctly" do
         _(output).must_equal("Bagel instance\n")
       end
+
+      describe "initialization" do
+        let(:source) do
+          <<~SRC
+            class Bagel {
+              init(texture) {
+                this.texture = texture;
+              }
+            }
+            var bagel = Bagel("crispy");
+
+            print bagel.texture;
+          SRC
+        end
+
+        it "executes correctly" do
+          _(output).must_equal("crispy\n")
+        end
+
+        describe "incorrect number of arguments" do
+          let(:source) do
+            <<~SRC
+              class Bagel {
+                init(texture) {
+                  this.texture = texture;
+                }
+              }
+              var bagel = Bagel();
+            SRC
+          end
+
+          it "errors out" do
+            _(errors).must_include("Expected 1 arguments, but got 0.\n")
+          end
+        end
+      end
     end
 
     describe "method lookup" do

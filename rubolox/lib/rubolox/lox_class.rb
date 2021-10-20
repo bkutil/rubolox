@@ -20,11 +20,20 @@ module Rubolox
     end
 
     def call(interpreter, arguments)
-      LoxInstance.new(self)
+      instance = LoxInstance.new(self)
+      initializer = find_method("init")
+
+      initializer.bind(instance).call(interpreter, arguments) unless initializer.nil?
+
+      instance
     end
 
     def arity
-      0
+      initializer = find_method("init")
+
+      return 0 if initializer.nil?
+
+      initializer.arity
     end
   end
 end
