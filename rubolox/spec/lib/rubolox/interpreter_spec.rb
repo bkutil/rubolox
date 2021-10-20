@@ -63,6 +63,25 @@ describe Rubolox::Interpreter do
           _(output).must_equal("crispy\n")
         end
 
+        describe "direct invocation" do
+          let(:source) do
+            <<~SRC
+              class Foo {
+                init() {
+                  print this;
+                }
+              }
+
+              var foo = Foo();
+              print foo.init();
+            SRC
+          end
+
+          it "executes correctly" do
+            _(output).must_equal("Foo instance\nFoo instance\nFoo instance\n")
+          end
+        end
+
         describe "incorrect number of arguments" do
           let(:source) do
             <<~SRC
