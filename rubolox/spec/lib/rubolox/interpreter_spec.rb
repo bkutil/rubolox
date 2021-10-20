@@ -12,7 +12,6 @@ describe Rubolox::Interpreter do
   let(:output) { capture_stdout { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
   let(:errors) { capture_stderr { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
 
-
   describe "classes" do
     describe "parsing" do
       let(:source) do
@@ -106,6 +105,23 @@ describe Rubolox::Interpreter do
     end
 
     describe "method binding" do
+      describe "this - invalid toplevel" do
+        let(:source) { "print this;" }
+        let(:errors) { capture_stderr { resolver.resolve_variables(ast) } }
+
+        it "errors out" do
+          _(errors).must_equal "[Line 1] Error at 'this': Can't use 'this' outside of a class.\n"
+        end
+      end
+
+      describe "this - invalid inside function" do
+        let(:source) { "fun notAMethod() { print this; }" }
+
+        it "errors out" do
+          _(errors).must_equal "[Line 1] Error at 'this': Can't use 'this' outside of a class.\n"
+        end
+      end
+
       describe "this - property" do
         let(:source) do
           <<~SRC

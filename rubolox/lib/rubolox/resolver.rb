@@ -9,10 +9,16 @@ module Rubolox
       METHOD = :METHOD
     end
 
+    module ClassType
+      NONE = :NONE
+      CLASS = :CLASS
+    end
+
     def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
       @current_function = FunctionType::NONE
+      @current_class = ClassType::NONE
     end
 
     # BK: in the original code, there are three methods with a different
@@ -35,6 +41,9 @@ module Rubolox
     end
 
     def visit_class_stmt(stmt)
+      enclosing_class = self.current_class
+      self.current_class = ClassType::CLASS
+
       declare(stmt.name)
       define(stmt.name)
 
@@ -48,6 +57,7 @@ module Rubolox
 
       end_scope
 
+      self.current_class = enclosing_class
       nil
     end
 
@@ -145,6 +155,10 @@ module Rubolox
     end
 
     def visit_this_expr(expr)
+      if self.current_class == ClassType::NONE
+        Rubolox.error(expr.keyword, "Can't use 'this' outside of a class.")
+        return nil
+      end
       resolve_local(expr, expr.keyword)
       nil
     end
@@ -165,7 +179,7 @@ module Rubolox
 
     private
 
-    attr_accessor :interpreter, :scopes, :current_function
+    attr_accessor :interpreter, :scopes, :current_function, :current_class
 
     def begin_scope
       self.scopes.push({})
