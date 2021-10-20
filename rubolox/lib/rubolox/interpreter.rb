@@ -41,7 +41,7 @@ module Rubolox
     end
 
     def visit_function_stmt(stmt)
-      function = LoxFunction.new(stmt, environment)
+      function = LoxFunction.new(stmt, environment, false)
       environment.define(stmt.name.lexeme, function)
       nil
     end
@@ -246,7 +246,7 @@ module Rubolox
       self.environment.define(stmt.name.lexeme, nil)
       methods = {}
       stmt.methods.each do |method|
-        function = LoxFunction.new(method, environment)
+        function = LoxFunction.new(method, environment, method.name.lexeme == "init")
         methods[method.name.lexeme] = function
       end
       klass = LoxClass.new(stmt.name.lexeme, methods)

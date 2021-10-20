@@ -63,7 +63,7 @@ describe Rubolox::Interpreter do
           _(output).must_equal("crispy\n")
         end
 
-        describe "direct invocation" do
+        describe "implicit return value is this" do
           let(:source) do
             <<~SRC
               class Foo {
