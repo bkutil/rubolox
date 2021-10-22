@@ -89,7 +89,7 @@ module Rubolox
         elsif is_alpha(c)
           identifier
         else
-          Rubolox.error(line, "Unexpected character #{c}.")
+          Rubolox.error(line, "Unexpected character.")
         end
       end
     end
