@@ -27,7 +27,7 @@ module Rubolox
       return var_declaration if match(TokenType::VAR)
 
       statement
-    rescue ParseError => error
+    rescue ParseError
       synchronize
       nil
     end
