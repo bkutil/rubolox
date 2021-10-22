@@ -125,6 +125,7 @@ module Rubolox
 
       if is_at_end
         Rubolox.error(line, "Unterminated string.")
+        return
       end
 
       advance # The closing ".
