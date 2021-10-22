@@ -108,7 +108,7 @@ module Rubolox
 
     def visit_return_stmt(stmt)
       if self.current_function == FunctionType::NONE
-        Rubolox.error(stmt.keyword, "Can't return from top level code.")
+        Rubolox.error(stmt.keyword, "Can't return from top-level code.")
       end
       if !stmt.value.nil?
         if self.current_function == FunctionType::INITIALIZER
@@ -233,7 +233,7 @@ module Rubolox
       scope = self.scopes.last
 
       if scope.key?(name.lexeme)
-        Rubolox.error(name, "already a variable with this name in this scope.")
+        Rubolox.error(name, "Already a variable with this name in this scope.")
       end
 
       scope[name.lexeme] = false
