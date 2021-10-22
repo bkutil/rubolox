@@ -125,6 +125,19 @@ module Rubolox
       value
     end
 
+    def visit_super_expr(_super)
+      distance = self.locals[_super]
+      superclass = self.environment.get_at(distance, "super")
+      object = self.environment.get_at(distance - 1, "this")
+      method = superclass.find_method(_super.method.lexeme)
+
+      if method.nil?
+        raise RuntimeError.new(_super.method, "Undefined property '#{_super.method.lexeme}'.")
+      end
+
+      method.bind(object)
+    end
+
     def visit_this_expr(this)
       look_up_variable(this.keyword, this)
     end
@@ -250,13 +263,23 @@ module Rubolox
           raise RuntimeError.new(stmt.superclass.name, "Superclass must be a class.")
         end
       end
+
       self.environment.define(stmt.name.lexeme, nil)
+
+      if !stmt.superclass.nil?
+        self.environment = Environment.new(environment)
+        self.environment.define("super", superclass)
+      end
+
       methods = {}
       stmt.methods.each do |method|
         function = LoxFunction.new(method, environment, method.name.lexeme == "init")
         methods[method.name.lexeme] = function
       end
       klass = LoxClass.new(stmt.name.lexeme, superclass, methods)
+      if !superclass.nil?
+        self.environment = self.environment.enclosing
+      end
       self.environment.assign(stmt.name, klass)
       nil
     end

@@ -54,6 +54,11 @@ module Rubolox
 
       resolve(stmt.superclass) unless stmt.superclass.nil?
 
+      if !stmt.superclass.nil?
+        begin_scope
+        self.scopes.last["super"] = true
+      end
+
       begin_scope
       self.scopes.last["this"] = true
 
@@ -66,6 +71,8 @@ module Rubolox
       end
 
       end_scope
+
+      end_scope unless stmt.superclass.nil?
 
       self.current_class = enclosing_class
       nil
@@ -167,6 +174,11 @@ module Rubolox
     def visit_set_expr(expr)
       resolve(expr.value)
       resolve(expr.object)
+      nil
+    end
+
+    def visit_super_expr(expr)
+      resolve_local(expr, expr.keyword)
       nil
     end
 
