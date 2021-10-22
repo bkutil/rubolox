@@ -37,7 +37,7 @@ module Rubolox
       superclass = nil
 
       if match(TokenType::LESS)
-        consume(TokenType::IDENTIFIER, "Expect supercass name.")
+        consume(TokenType::IDENTIFIER, "Expect superclass name.")
         superclass = Expr::Variable.new(previous)
       end
 
