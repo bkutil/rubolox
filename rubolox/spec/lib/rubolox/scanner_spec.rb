@@ -97,7 +97,7 @@ describe Rubolox::Scanner do
 
       it "reports an error" do
         output = capture_stderr { scanner.scan_tokens }
-        _(output.to_s).must_equal "[Line 2] Error : Unterminated string.\n"
+        _(output.to_s).must_equal "[line 2] Error: Unterminated string.\n"
       end
     end
   end
@@ -167,7 +167,7 @@ describe Rubolox::Scanner do
 
     it "outputs errors" do
       output = capture_stderr { scanner.scan_tokens }
-      _(output).must_equal "[Line 1] Error : Unexpected character @.\n"
+      _(output).must_equal "[line 1] Error: Unexpected character.\n"
     end
   end
 end

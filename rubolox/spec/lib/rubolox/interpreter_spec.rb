@@ -228,7 +228,7 @@ describe Rubolox::Interpreter do
           end
 
           it "errors out" do
-            _(errors).must_include("Expected 1 arguments, but got 0.\n")
+            _(errors).must_include("Expected 1 arguments but got 0.\n")
           end
         end
       end
@@ -298,7 +298,7 @@ describe Rubolox::Interpreter do
         let(:errors) { capture_stderr { resolver.resolve_variables(ast) } }
 
         it "errors out" do
-          _(errors).must_equal "[Line 1] Error at 'this': Can't use 'this' outside of a class.\n"
+          _(errors).must_equal "[line 1] Error at 'this': Can't use 'this' outside of a class.\n"
         end
       end
 
@@ -306,7 +306,7 @@ describe Rubolox::Interpreter do
         let(:source) { "fun notAMethod() { print this; }" }
 
         it "errors out" do
-          _(errors).must_equal "[Line 1] Error at 'this': Can't use 'this' outside of a class.\n"
+          _(errors).must_equal "[line 1] Error at 'this': Can't use 'this' outside of a class.\n"
         end
       end
 
@@ -509,7 +509,7 @@ describe Rubolox::Interpreter do
       let(:source) { "clock(1);" }
 
       it "errors out" do
-        _(errors).must_equal "Expected 0 arguments, but got 1.\n[Line 1]\n"
+        _(errors).must_equal "Expected 0 arguments but got 1.\n[line 1]\n"
       end
     end
 
@@ -517,7 +517,7 @@ describe Rubolox::Interpreter do
       let(:source) { '"totally not a function"();' }
 
       it "errors out" do
-        _(errors).must_equal "Can only call functions and classes.\n[Line 1]\n"
+        _(errors).must_equal "Can only call functions and classes.\n[line 1]\n"
       end
     end
   end
@@ -592,7 +592,7 @@ describe Rubolox::Interpreter do
       end
 
       it "errors out" do
-        _(errors).must_include "Error at 'a': already a variable"
+        _(errors).must_include "Error at 'a': Already a variable"
       end
     end
   end
@@ -602,7 +602,7 @@ describe Rubolox::Interpreter do
     let(:errors) { capture_stderr { resolver.resolve_variables(ast); } }
 
     it "errors out" do
-      _(errors).must_include "Can't return from top level code"
+      _(errors).must_include "Can't return from top-level code"
     end
   end
 
@@ -703,6 +703,14 @@ describe Rubolox::Interpreter do
               _(output).must_equal("yes\n")
             end
           end
+
+          describe "chaining" do
+            let(:source) { 'print false or false or true;' }
+
+            it "prints the right expression" do
+              _(output).must_equal("true\n")
+            end
+          end
         end
 
         describe "and" do
@@ -719,6 +727,14 @@ describe Rubolox::Interpreter do
 
             it "prints the left expression" do
               _(output).must_equal("nil\n")
+            end
+          end
+
+          describe "chaining" do
+            let(:source) { 'print true and true and false;'; }
+
+            it "prints the right expression" do
+              _(output).must_equal("false\n")
             end
           end
         end

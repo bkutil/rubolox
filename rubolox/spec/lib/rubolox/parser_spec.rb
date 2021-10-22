@@ -13,7 +13,7 @@ describe Rubolox::Parser do
 
     it "reports an error" do
       output = capture_stderr { parser.parse }
-      _(output.to_s).must_equal "[Line 1] Error at ';': Expect '.' after 'super'.\n"
+      _(output.to_s).must_equal "[line 1] Error at ';': Expect '.' after 'super'.\n"
     end
   end
 
@@ -45,7 +45,7 @@ describe Rubolox::Parser do
 
       it "reports an error" do
         output = capture_stderr { parser.parse }
-        _(output.to_s).must_equal "[Line 1] Error at end: Expect '}' after block.\n"
+        _(output.to_s).must_equal "[line 1] Error at end: Expect '}' after block.\n"
       end
     end
   end
@@ -122,7 +122,7 @@ describe Rubolox::Parser do
 
       it "reports an error" do
         output = capture_stderr { parser.parse }
-        _(output.to_s).must_equal "[Line 1] Error at ')': Expect expression.\n" 
+        _(output.to_s).must_equal "[line 1] Error at ')': Expect expression.\n" 
       end
 
       it "returns nil" do
@@ -185,7 +185,7 @@ describe Rubolox::Parser do
 
         it "reports an error" do
           output = capture_stderr { parser.parse }
-          _(output.to_s).must_equal "[Line 1] Error at end: Expect ')' after expression.\n" 
+          _(output.to_s).must_equal "[line 1] Error at end: Expect ')' after expression.\n" 
         end
 
         it "returns nil" do
