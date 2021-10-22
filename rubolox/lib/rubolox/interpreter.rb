@@ -236,7 +236,7 @@ module Rubolox
       function = callee
 
       if arguments.size != function.arity
-        raise RuntimeError.new(call.paren, "Expected #{function.arity} arguments, but got #{arguments.size}.")
+        raise RuntimeError.new(call.paren, "Expected #{function.arity} arguments but got #{arguments.size}.")
       end
 
       function.call(self, arguments)
@@ -247,7 +247,7 @@ module Rubolox
 
       return object.get(get.name) if object.is_a?(LoxInstance)
 
-      raise RuntimeError.new(get.name, "Only instances have properties")
+      raise RuntimeError.new(get.name, "Only instances have properties.")
     end
 
     def visit_block_stmt(block)
