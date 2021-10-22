@@ -75,19 +75,19 @@ module Rubolox
     if (token_or_line.is_a?(Integer))
       report(token_or_line, "", message)
     elsif (token_or_line.type == TokenType::EOF)
-      report(token_or_line.line, "at end", message)
+      report(token_or_line.line, " at end", message)
     else
-      report(token_or_line.line, "at '#{token_or_line.lexeme}'", message)
+      report(token_or_line.line, " at '#{token_or_line.lexeme}'", message)
     end
   end
 
   def self.runtime_error(error)
-    $stderr.puts("#{error.message}\n[Line #{error.token.line}]")
+    $stderr.puts("#{error.message}\n[line #{error.token.line}]")
     @had_runtime_error = true
   end
 
   def self.report(line, where, message)
-    $stderr.puts("[Line #{line}] Error #{where}: #{message}")
+    $stderr.puts("[line #{line}] Error#{where}: #{message}")
     @had_error = true
   end
 end
