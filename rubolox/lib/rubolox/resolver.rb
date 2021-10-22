@@ -48,6 +48,12 @@ module Rubolox
       declare(stmt.name)
       define(stmt.name)
 
+      if !stmt.superclass.nil? && stmt.name.lexeme == stmt.superclass.name.lexeme
+        Rubolox.error(stmt.superclass.name, "A class can't inherit from itself.")
+      end
+
+      resolve(stmt.superclass) unless stmt.superclass.nil?
+
       begin_scope
       self.scopes.last["this"] = true
 

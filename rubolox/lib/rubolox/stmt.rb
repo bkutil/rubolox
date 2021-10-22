@@ -52,10 +52,11 @@ module Rubolox
     end
 
     class Class < Stmt
-      attr_reader :name, :methods
+      attr_reader :name, :superclass, :methods
 
-      def initialize(name, methods)
+      def initialize(name, superclass, methods)
         @name = name
+        @superclass = superclass
         @methods = methods
       end
 

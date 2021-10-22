@@ -2,10 +2,11 @@ module Rubolox
   class LoxClass
     include LoxCallable
 
-    attr_accessor :name, :methods
+    attr_accessor :name, :superclass, :methods
 
-    def initialize(name, methods)
+    def initialize(name, superclass, methods)
       @name = name
+      @superclass = superclass
       @methods = methods
     end
 

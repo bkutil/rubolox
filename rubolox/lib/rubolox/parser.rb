@@ -34,6 +34,13 @@ module Rubolox
 
     def class_declaration
       name = consume(TokenType::IDENTIFIER, "Expect class name.")
+      superclass = nil
+
+      if match(TokenType::LESS)
+        consume(TokenType::IDENTIFIER, "Expect supercass name.")
+        superclass = Expr::Variable.new(previous)
+      end
+
       consume(TokenType::LEFT_BRACE, "Expect '{' before class body.")
 
       methods = []
@@ -43,7 +50,7 @@ module Rubolox
 
       consume(TokenType::RIGHT_BRACE, "Expect '}' after class body.")
 
-      Stmt::Class.new(name, methods)
+      Stmt::Class.new(name, superclass, methods)
     end
 
     def statement

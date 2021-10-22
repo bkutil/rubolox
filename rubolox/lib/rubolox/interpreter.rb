@@ -243,13 +243,20 @@ module Rubolox
     end
 
     def visit_class_stmt(stmt)
+      superclass = nil
+      if !stmt.superclass.nil?
+        superclass = evaluate(stmt.superclass)
+        if !superclass.is_a?(LoxClass)
+          raise RuntimeError.new(stmt.superclass.name, "Superclass must be a class.")
+        end
+      end
       self.environment.define(stmt.name.lexeme, nil)
       methods = {}
       stmt.methods.each do |method|
         function = LoxFunction.new(method, environment, method.name.lexeme == "init")
         methods[method.name.lexeme] = function
       end
-      klass = LoxClass.new(stmt.name.lexeme, methods)
+      klass = LoxClass.new(stmt.name.lexeme, superclass, methods)
       self.environment.assign(stmt.name, klass)
       nil
     end

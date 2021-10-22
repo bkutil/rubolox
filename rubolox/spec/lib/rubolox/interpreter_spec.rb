@@ -13,6 +13,35 @@ describe Rubolox::Interpreter do
   let(:errors) { capture_stderr { resolver.resolve_variables(ast); interpreter.interpret(ast) } }
 
   describe "classes" do
+    describe "inheritance" do
+      describe "invalid ancestor" do
+        let(:source) do
+          <<~SRC
+          var NotAClass = "I am totally not a class";
+
+          class SubClass < NotAClass {}
+          SRC
+        end
+
+        it "errors out" do
+          _(errors).must_include("Superclass must be a class.")
+        end
+      end
+
+      describe "cycle 1 in chain" do
+        let(:source) do
+          <<~SRC
+          class Oops < Oops { }
+          SRC
+        end
+        let(:errors) { capture_stderr { resolver.resolve_variables(ast) } }
+
+        it "errors out" do
+          _(errors).must_include("A class can't inherit from itself.")
+        end
+      end
+    end
+
     describe "parsing" do
       let(:source) do
         <<~SRC
