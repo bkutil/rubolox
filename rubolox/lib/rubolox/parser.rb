@@ -244,7 +244,7 @@ module Rubolox
       # BK: 'and' is reserved in Ruby
       expr = and_expression
 
-      if match(TokenType::OR)
+      while match(TokenType::OR)
         operator = previous
         right = and_expression
         expr = Expr::Logical.new(expr, operator, right)
@@ -256,7 +256,7 @@ module Rubolox
     def and_expression
       expr = equality
 
-      if match(TokenType::AND)
+      while match(TokenType::AND)
         operator = previous
         right = equality
         expr = Expr::Logical.new(expr, operator, right)
