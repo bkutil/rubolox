@@ -117,7 +117,7 @@ module Rubolox
       object = evaluate(set.object)
 
       if !object.is_a?(LoxInstance)
-        raise RuntimeError.new(expr.name, "Only instances have fields.")
+        raise RuntimeError.new(set.name, "Only instances have fields.")
       end
 
       value = evaluate(set.value)
