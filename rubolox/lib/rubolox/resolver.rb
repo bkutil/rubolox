@@ -11,8 +11,9 @@ module Rubolox
     end
 
     module ClassType
-      NONE = :NONE
       CLASS = :CLASS
+      NONE = :NONE
+      SUBCLASS = :SUBCLASS
     end
 
     def initialize(interpreter)
@@ -52,7 +53,10 @@ module Rubolox
         Rubolox.error(stmt.superclass.name, "A class can't inherit from itself.")
       end
 
-      resolve(stmt.superclass) unless stmt.superclass.nil?
+      if !stmt.superclass.nil?
+        self.current_class = ClassType::SUBCLASS
+        resolve(stmt.superclass)
+      end
 
       if !stmt.superclass.nil?
         begin_scope
@@ -178,6 +182,12 @@ module Rubolox
     end
 
     def visit_super_expr(expr)
+      if self.current_class == ClassType::NONE
+        Rubolox.error(expr.keyword, "Can't use 'super' outside of a class.")
+      elsif self.current_class != ClassType::SUBCLASS
+        Rubolox.error(expr.keyword, "Can't use 'super' in a class with no superclass.")
+      end
+
       resolve_local(expr, expr.keyword)
       nil
     end

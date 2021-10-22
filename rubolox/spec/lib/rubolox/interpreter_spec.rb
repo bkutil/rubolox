@@ -48,6 +48,53 @@ describe Rubolox::Interpreter do
         end
       end
 
+      describe "super" do
+        describe "method override" do
+          let(:source) do
+            <<~SRC
+            class Doughnut {
+              cook() {
+                print "Fry until golden brown.";
+              }
+            }
+
+            class BostonCream < Doughnut {
+              cook() {
+                super.cook();
+                print "Pipe full of custard and coat with chocolate.";
+              }
+            }
+
+            BostonCream().cook();
+            SRC
+          end
+
+          it "executes correctly" do
+            _(output).must_equal("Fry until golden brown.\nPipe full of custard and coat with chocolate.\n")
+          end
+        end
+
+        describe "super in a class without an ancestor" do
+          let(:source) do
+            <<~SRC
+            class Eclair {
+              cook() {
+                super.cook();
+                print "Pipe full of crème pâtissière.";
+              }
+            }
+
+            Eclair().cook();
+            SRC
+          end
+          let(:errors) { capture_stderr { resolver.resolve_variables(ast) } }
+
+          it "errors out" do
+            _(errors).must_include("Can't use 'super' in a class with no superclass.")
+          end
+        end
+      end
+
       describe "cycle 1 in chain" do
         let(:source) do
           <<~SRC

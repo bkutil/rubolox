@@ -8,6 +8,15 @@ describe Rubolox::Parser do
   let(:parser) { Rubolox::Parser.new(tokens) }
   let(:tokens) { Rubolox::Scanner.new(source).scan_tokens }
 
+  describe "lone super" do
+    let(:source) { "print super;" }
+
+    it "reports an error" do
+      output = capture_stderr { parser.parse }
+      _(output.to_s).must_equal "[Line 1] Error at ';': Expect '.' after 'super'.\n"
+    end
+  end
+
   describe "blocks" do
     describe "empty" do
       let(:source) { "{ }" }
