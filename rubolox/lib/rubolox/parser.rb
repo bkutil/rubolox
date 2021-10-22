@@ -368,6 +368,13 @@ module Rubolox
         return Expr::Literal.new(previous.literal)
       end
 
+      if match(TokenType::SUPER)
+        keyword = previous
+        consume(TokenType::DOT, "Expect '.' after 'super'.")
+        method = consume(TokenType::IDENTIFIER, "Expect superclass method name.")
+        return Expr::Super.new(keyword, method)
+      end
+
       if match(TokenType::THIS)
         return Expr::This.new(previous)
       end

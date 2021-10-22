@@ -33,6 +33,10 @@ module Rubolox
         raise 'To be implemented'
       end
 
+      def visit_super_expr(expr)
+        raise 'To be implemented'
+      end
+
       def visit_this_expr(expr)
         raise 'To be implemented'
       end
@@ -150,6 +154,19 @@ module Rubolox
 
       def accept(visitor)
         visitor.visit_set_expr(self)
+      end
+    end
+
+    class Super < Expr
+      attr_reader :keyword, :method
+
+      def initialize(keyword, method)
+        @keyword = keyword
+        @method = method
+      end
+
+      def accept(visitor)
+        visitor.visit_super_expr(self)
       end
     end
 
