@@ -28,6 +28,26 @@ describe Rubolox::Interpreter do
         end
       end
 
+      describe "methods" do
+        let(:source) do
+          <<~SRC
+          class Doughnut {
+            cook() {
+              print "Fry until golden brown.";
+            }
+          }
+
+          class BostonCream < Doughnut {}
+
+          BostonCream().cook();
+          SRC
+        end
+
+        it "executes correctly" do
+          _(output).must_equal("Fry until golden brown.\n")
+        end
+      end
+
       describe "cycle 1 in chain" do
         let(:source) do
           <<~SRC

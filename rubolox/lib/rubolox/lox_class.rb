@@ -13,6 +13,8 @@ module Rubolox
     def find_method(name)
       return methods[name] if methods.key?(name)
 
+      return superclass.find_method(name) unless superclass.nil?
+
       nil
     end
 
